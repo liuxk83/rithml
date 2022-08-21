@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rithml"
+version = "1.0.0"
+authors = [
+  { name="Kevin Liu", email="kevinl9@yahoo.com" },
+]
+description = "Library for common machine learning algorithms"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.7"
+dependencies = [
+  "numpy >= 1.20.3",
+  "scipy >= 1.7.0",
+  "cvxopt >= 1.2.7",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/liuxk83/rithml"
+"Bug Tracker" = "https://github.com/liuxk83/rithml/issues"
