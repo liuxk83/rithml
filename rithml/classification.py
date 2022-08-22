@@ -2,15 +2,15 @@
 This module implements various machine learning models for
 classification, listed below (alongside their class name).
 
-Logistic regression (`LogisticRegression`)
-Decision tree (`DecisionTreeClassifier`)
-K-nearest neighbors (`KNNClassifier`)
-Gradient boosting classification trees (`GradientBoostingClassifier`)
-Random forest (`RandomForestClassifier`)
-Support vector machine (`SupportVectorClassifier`)
-Linear/quadratic discriminant analysis (`DiscriminantAnalysis`)
-Gaussian naive Bayes (`GaussianNBClassifier`)
-AdaBoost (`AdaBoostClassifier`)
+* Logistic regression (``LogisticRegression``)
+* Decision tree (``DecisionTreeClassifier``)
+* K-nearest neighbors (``KNNClassifier``)
+* Gradient boosting classification trees (``GradientBoostingClassifier``)
+* Random forest (``RandomForestClassifier``)
+* Support vector machine (``SupportVectorClassifier``)
+* Linear/quadratic discriminant analysis (``DiscriminantAnalysis``)
+* Gaussian naive Bayes (``GaussianNBClassifier``)
+* AdaBoost (``AdaBoostClassifier``)
 '''
 
 import numpy as np
