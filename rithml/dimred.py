@@ -2,8 +2,9 @@
 This module implements various machine learning models for
 dimensionality reduction, listed below (alongside their class name).
 
-* Principal components analysis (``PCA``)
-* Kernel principal components analysis (``KernelPCA``)
+* Kernel principal components analysis 
+(:class"`rithml.dimred.KernelPCA`)
+* Principal components analysis (:class:`rithml.dimred.PCA`)
 '''
 
 import numpy as np
@@ -18,9 +19,9 @@ class PCA(base.BaseModel):
 
     The following variable names are used in this class's documentation:
 
-    ``n_samples``: Number of samples in the training data.
+    `n_samples`: Number of samples in the training data.
     
-    ``n_features``: Number of features in the training data.
+    `n_features`: Number of features in the training data.
     
     Parameters
     ----------
@@ -30,8 +31,8 @@ class PCA(base.BaseModel):
 
     Attributes
     ----------
-    components_ : numpy.ndarray of shape ``(n_components, n_features)``
-        Array of components used by the model, where ``n_components`` is
+    components_ : numpy.ndarray of shape `(n_components, n_features)`
+        Array of components used by the model, where `n_components` is
         the number of components (specified in the constructor).
     '''
     
@@ -55,7 +56,7 @@ class PCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_samples, n_features)``
+        X : numpy.ndarray of shape `(n_samples, n_features)`
             Training predictors.
                     
         Returns
@@ -81,17 +82,17 @@ class PCA(base.BaseModel):
         '''
         Reduces the dimension of data using the model.
         
-        ``n_test_samples`` refers to the number of samples in the input
+        `n_test_samples` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
             Data to reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
             Transformed data.
         '''
         
@@ -108,12 +109,12 @@ class PCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_samples, n_features)``
+        X : numpy.ndarray of shape `(n_samples, n_features)`
             Data to fit to and reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape ``(n_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_samples, n_components)`
             Transformed data.
         '''
         
@@ -123,17 +124,17 @@ class PCA(base.BaseModel):
         '''
         Reconstructs transformed data into their original dimension.
 
-        ``n_test_samples`` refers to the number of samples in the input
+        `n_test_samples` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
             Transformed data to reconstruct.
         
         Returns
         -------
-        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
             Reconstructed data.
     '''
         
@@ -149,9 +150,9 @@ class KernelPCA(base.BaseModel):
 
     The following variable names are used in this class's documentation:
     
-    ``n_samples``: Number of samples in the training data.
+    `n_samples`: Number of samples in the training data.
     
-    ``n_features``: Number of features in the training data.
+    `n_features`: Number of features in the training data.
 
     Parameters
     ----------
@@ -182,13 +183,13 @@ class KernelPCA(base.BaseModel):
     
     Attributes
     ----------
-    components_ : numpy.ndarray of shape ``(n_components, n_samples)``
-        Array of components used by the model, where ``n_components`` is
+    components_ : numpy.ndarray of shape `(n_components, n_samples)`
+        Array of components used by the model, where `n_components` is
         the number of components (specified in the constructor).
     regressors_ : list
-        List of regressors (see ``rithml.regression.KernelRegression``)
-        used for inverse transformation. Only created if
-        `fit_inverse_transform == True`.
+        List of regressors (see
+        :class:`rithml.regression.KernelRegression`) used for inverse
+        transformation. Only created if `fit_inverse_transform == True`.
     '''
     
     def __init__(
@@ -221,7 +222,7 @@ class KernelPCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_samples, n_features)``
+        X : numpy.ndarray of shape `(n_samples, n_features)`
             Training predictors.
                     
         Returns
@@ -284,17 +285,17 @@ class KernelPCA(base.BaseModel):
         '''
         Reduces the dimension of data using the model.
         
-        ``n_test_samples`` refers to the number of samples in the input
+        `n_test_samples` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
             Data to reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
             Transformed data.
         '''
         
@@ -314,12 +315,12 @@ class KernelPCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape ``(n_samples, n_features)``
+        X : numpy.ndarray of shape `(n_samples, n_features)`
             Data to fit to and reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape ``(n_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_samples, n_components)`
             Transformed data.
         '''
         
@@ -331,21 +332,21 @@ class KernelPCA(base.BaseModel):
         original dimension.
         
         This is performed via kernel regression (see
-        ``rithml.regression.KernelRegression``), where the regressors
-        are fitted to the original training data using the transformed
-        training data as features.
+        :class:`rithml.regression.KernelRegression`), where the
+        regressors are fitted to the original training data using the
+        transformed training data as features.
         
-        ``n_test_samples`` refers to the number of samples in the input
+        `n_test_samples` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
+        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
             Transformed data to reconstruct.
         
         Returns
         -------
-        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
             Reconstructed data.
         '''
         

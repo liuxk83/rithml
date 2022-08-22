@@ -2,10 +2,10 @@ API Reference
 =============
 RithML contains four main modules, each corresponding to a category of machine learning algorithms. They are listed below:
 
-* :module:`~rithml.classification`: Classification
-* :module:`~rithml.regression`: Regression
-* :module:`~rithml.dimred`: Dimensionality reduction
-* :module:`~rithml.clustering`: Clustering
+* :module:`rithml.classification`: Classification
+* :module:`rithml.regression`: Regression
+* :module:`rithml.dimred`: Dimensionality reduction
+* :module:`rithml.clustering`: Clustering
 
 Classification
 --------------
