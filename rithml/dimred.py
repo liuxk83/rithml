@@ -17,36 +17,22 @@ class PCA(base.BaseModel):
     Class for performing principal components analysis (PCA).
 
     The following variable names are used in this class's documentation:
-    |``n_samples``: Number of samples in the training data.
-    |``n_features``: Number of features in the training data.
+
+    ``n_samples``: Number of samples in the training data.
+    
+    ``n_features``: Number of features in the training data.
     
     Parameters
     ----------
     n_components : int, default None
-        |Number of principal components kept and used by the model.
-        |If None, then all components are kept.
+        Number of principal components kept and used by the model.
+        If None, then all components are kept.
 
     Attributes
     ----------
     components_ : numpy.ndarray of shape ``(n_components, n_features)``
         Array of components used by the model, where ``n_components`` is
         the number of components (specified in the constructor).
-            
-    Methods
-    -------
-    fit(X)
-        Fits a PCA model to data.
-    transform(X)
-        Reduces the dimension of data using the model.
-    fit_transform(X)
-        Fits the model to data and then reduces their dimension.
-    inverse_transform(Z)
-        Reconstructs transformed data into their original dimension.
-    get_params([deep])
-        Gets ``__init__`` parameter names and corresponding arguments.
-    set_params(**params)
-        Sets the specified ``__init__`` parameters to the specified
-        values.
     '''
     
     def __init__(self, n_components=None):
@@ -162,16 +148,17 @@ class KernelPCA(base.BaseModel):
     kernel methods.
 
     The following variable names are used in this class's documentation:
-    |``n_samples``: Number of samples in the training data.
-    |``n_features``: Number of features in the training data.
+    
+    ``n_samples``: Number of samples in the training data.
+    
+    ``n_features``: Number of features in the training data.
 
     Parameters
     ----------
     n_components : int, default None
-        |Number of principal components kept and used by the model.
-        |If None, then all components are kept.
-    kernel : {
-        'rbf', 'linear', 'poly'} or callable, default 'rbf'
+        Number of principal components kept and used by the model.
+        If None, then all components are kept.
+    kernel : {'rbf', 'linear', 'poly'} or callable, default 'rbf'
         Determines kernel function used by all underlying binary
         classifiers. If a function is provided, then it must take in two
         feature vectors and compute a float.
@@ -189,9 +176,9 @@ class KernelPCA(base.BaseModel):
         If True, fit the regressors for inverse transformation during
         fitting. Note that this takes additional time.
     alpha : float, default 1.0
-        |Regularization coefficient (strength) for regressors used for
+        Regularization coefficient (strength) for regressors used for
         inverse transformation.
-        |If `fit_inverse_transform=False`, then this is ignored.
+        If `fit_inverse_transform == False`, then this is ignored.
     
     Attributes
     ----------
@@ -202,27 +189,6 @@ class KernelPCA(base.BaseModel):
         List of regressors (see ``rithml.regression.KernelRegression``)
         used for inverse transformation. Only created if
         `fit_inverse_transform == True`.
-            
-    Methods
-    -------
-    fit(X)
-        Fits a kernel PCA model to data.
-    transform(X)
-        Reduces the dimension of data using the model.
-    fit_transform(X)
-        Fits the model to data and then reduces their dimension.
-    inverse_transform(Z)
-        |If applicable, reconstructs transformed data into their
-        original dimension.
-        |This is performed via kernel regression (see
-        ``rithml.regression.KernelRegression``), where the regressors
-        are fitted to the original training data using the transformed
-        training data as features.
-    get_params([deep])
-        Gets ``__init__`` parameter names and corresponding arguments.
-    set_params(**params)
-        Sets the specified ``__init__`` parameters to the specified
-        values.
     '''
     
     def __init__(
@@ -255,7 +221,7 @@ class KernelPCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_samples, n_features)``
             Training predictors.
                     
         Returns
@@ -361,9 +327,10 @@ class KernelPCA(base.BaseModel):
 
     def inverse_transform(self, Z):
         '''
-        |If applicable, reconstructs transformed data into their
+        If applicable, reconstructs transformed data into their
         original dimension.
-        |This is performed via kernel regression (see
+        
+        This is performed via kernel regression (see
         ``rithml.regression.KernelRegression``), where the regressors
         are fitted to the original training data using the transformed
         training data as features.
