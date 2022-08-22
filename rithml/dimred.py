@@ -17,9 +17,15 @@ class PCA(base.BaseModel):
     Class for performing principal components analysis (PCA).
 
     The following variable names are used in this class's documentation:
-    * ``n_samples``: Number of samples in the training data.
-    * ``n_features``: Number of features in the training data.
+    |``n_samples``: Number of samples in the training data.
+    |``n_features``: Number of features in the training data.
     
+    Parameters
+    ----------
+    n_components : int, default None
+        |Number of principal components kept and used by the model.
+        |If None, then all components are kept.
+
     Attributes
     ----------
     components_ : numpy.ndarray of shape ``(n_components, n_features)``
@@ -37,21 +43,15 @@ class PCA(base.BaseModel):
     inverse_transform(Z)
         Reconstructs transformed data into their original dimension.
     get_params([deep])
-        Gets `__init__` parameter names and corresponding arguments.
+        Gets ``__init__`` parameter names and corresponding arguments.
     set_params(**params)
-        Sets the specified `__init__` parameters to the specified
+        Sets the specified ``__init__`` parameters to the specified
         values.
     '''
     
     def __init__(self, n_components=None):
         '''
         Creates a PCA model.
-        
-        Parameters
-        ----------
-        n_components : int, default None
-            |Number of principal components kept and used by the model.
-            |If None, then all components are kept.
         '''
         
         # Set parameters as attributes
@@ -69,7 +69,7 @@ class PCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_samples, n_features)``
             Training predictors.
                     
         Returns
@@ -95,17 +95,17 @@ class PCA(base.BaseModel):
         '''
         Reduces the dimension of data using the model.
         
-        `n_test_samples` refers to the number of samples in the input
+        ``n_test_samples`` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
             Data to reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
             Transformed data.
         '''
         
@@ -122,12 +122,12 @@ class PCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_samples, n_features)``
             Data to fit to and reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape `(n_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_samples, n_components)``
             Transformed data.
         '''
         
@@ -137,17 +137,17 @@ class PCA(base.BaseModel):
         '''
         Reconstructs transformed data into their original dimension.
 
-        `n_test_samples` refers to the number of samples in the input
+        ``n_test_samples`` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
             Transformed data to reconstruct.
         
         Returns
         -------
-        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
             Reconstructed data.
     '''
         
@@ -162,16 +162,44 @@ class KernelPCA(base.BaseModel):
     kernel methods.
 
     The following variable names are used in this class's documentation:
-    * `n_samples`: Number of samples in the training data.
-    * `n_features`: Number of features in the training data.
+    |``n_samples``: Number of samples in the training data.
+    |``n_features``: Number of features in the training data.
+
+    Parameters
+    ----------
+    n_components : int, default None
+        |Number of principal components kept and used by the model.
+        |If None, then all components are kept.
+    kernel : {
+        'rbf', 'linear', 'poly'} or callable, default 'rbf'
+        Determines kernel function used by all underlying binary
+        classifiers. If a function is provided, then it must take in two
+        feature vectors and compute a float.
+    degree : int, default 3
+        Degree of polynomial kernel. If `kernel` is not 'poly', then
+        this parameter is ignored.
+    gamma : float, default 1.0
+        Gamma parameter for polynomial and radial basis function (RBF)
+        kernels. If `kernel` is not 'poly' or 'rbf', then this parameter
+        is ignored.
+    coef0 : float, default 1.0
+        Constant term used in polynomial kernel. If `kernel` is not
+        'poly', then this parameter is ignored.
+    fit_inverse_transform : bool, default False
+        If True, fit the regressors for inverse transformation during
+        fitting. Note that this takes additional time.
+    alpha : float, default 1.0
+        |Regularization coefficient (strength) for regressors used for
+        inverse transformation.
+        |If `fit_inverse_transform=False`, then this is ignored.
     
     Attributes
     ----------
-    components_ : numpy.ndarray of shape `(n_components, n_samples)`
-        Array of components used by the model, where `n_components` is
+    components_ : numpy.ndarray of shape ``(n_components, n_samples)``
+        Array of components used by the model, where ``n_components`` is
         the number of components (specified in the constructor).
     regressors_ : list
-        List of regressors (see `rithml.regression.KernelRegression`)
+        List of regressors (see ``rithml.regression.KernelRegression``)
         used for inverse transformation. Only created if
         `fit_inverse_transform == True`.
             
@@ -187,13 +215,13 @@ class KernelPCA(base.BaseModel):
         |If applicable, reconstructs transformed data into their
         original dimension.
         |This is performed via kernel regression (see
-        `rithml.regression.KernelRegression`), where the regressors are
-        fitted to the original training data using the transformed
+        ``rithml.regression.KernelRegression``), where the regressors
+        are fitted to the original training data using the transformed
         training data as features.
     get_params([deep])
-        Gets `__init__` parameter names and corresponding arguments.
+        Gets ``__init__`` parameter names and corresponding arguments.
     set_params(**params)
-        Sets the specified `__init__` parameters to the specified
+        Sets the specified ``__init__`` parameters to the specified
         values.
     '''
     
@@ -202,34 +230,6 @@ class KernelPCA(base.BaseModel):
         coef0=1.0, fit_inverse_transform=False, alpha=1.0):
         '''
         Creates a kernel PCA model.
-        
-        Parameters
-        ----------
-        n_components : int, default None
-            |Number of principal components kept and used by the model.
-            |If None, then all components are kept.
-        kernel : {
-            'rbf', 'linear', 'poly'} or callable, default 'rbf'
-            Determines kernel function used by all underlying binary
-            classifiers. If a function is provided, then it must
-            take in two feature vectors and compute a float.
-        degree : int, default 3
-            Degree of polynomial kernel. If `kernel` is not 'poly', then
-            this parameter is ignored.
-        gamma : float, default 1.0
-            Gamma parameter for polynomial and radial basis function
-            (RBF) kernels. If `kernel` is not 'poly' or 'rbf', then
-            this parameter is ignored.
-        coef0 : float, default 1.0
-            Constant term used in polynomial kernel. If `kernel` is not
-            'poly', then this parameter is ignored.
-        fit_inverse_transform : bool, default False
-            If True, fit the regressors for inverse transformation
-            during fitting. Note that this takes additional time.
-        alpha : float, default 1.0
-            |Regularization coefficient (strength) for regressors used
-            for inverse transformation.
-            |If `fit_inverse_transform=False`, then this is ignored.
         '''
         
         # Set parameters as attributes
@@ -260,8 +260,8 @@ class KernelPCA(base.BaseModel):
                     
         Returns
         -------
-        self : PCA
-            Fitted PCA model.
+        self : KernelPCA
+            Fitted kernel PCA model.
         '''
         
         # Set kernel function
@@ -318,17 +318,17 @@ class KernelPCA(base.BaseModel):
         '''
         Reduces the dimension of data using the model.
         
-        `n_test_samples` refers to the number of samples in the input
+        ``n_test_samples`` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
             Data to reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
             Transformed data.
         '''
         
@@ -348,12 +348,12 @@ class KernelPCA(base.BaseModel):
         
         Parameters
         ----------
-        X : numpy.ndarray of shape `(n_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_samples, n_features)``
             Data to fit to and reduce dimension of.
         
         Returns
         -------
-        Z : numpy.ndarray of shape `(n_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_samples, n_components)``
             Transformed data.
         '''
         
@@ -364,21 +364,21 @@ class KernelPCA(base.BaseModel):
         |If applicable, reconstructs transformed data into their
         original dimension.
         |This is performed via kernel regression (see
-        `rithml.regression.KernelRegression`), where the regressors are
-        fitted to the original training data using the transformed
+        ``rithml.regression.KernelRegression``), where the regressors
+        are fitted to the original training data using the transformed
         training data as features.
         
-        `n_test_samples` refers to the number of samples in the input
+        ``n_test_samples`` refers to the number of samples in the input
         data.
         
         Parameters
         ----------
-        Z : numpy.ndarray of shape `(n_test_samples, n_components)`
+        Z : numpy.ndarray of shape ``(n_test_samples, n_components)``
             Transformed data to reconstruct.
         
         Returns
         -------
-        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+        X : numpy.ndarray of shape ``(n_test_samples, n_features)``
             Reconstructed data.
         '''
         
