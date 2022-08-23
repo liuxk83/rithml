@@ -1,16 +1,16 @@
 '''
-This module implements various machine learning models for
-classification, listed below (alongside their class name).
+The :py:mod:`rithml.classification` module implements various machine
+learning algorithm for classification:
 
-* Logistic regression (``LogisticRegression``)
-* Decision tree (``DecisionTreeClassifier``)
-* K-nearest neighbors (``KNNClassifier``)
-* Gradient boosting classification trees (``GradientBoostingClassifier``)
-* Random forest (``RandomForestClassifier``)
-* Support vector machine (``SupportVectorClassifier``)
-* Linear/quadratic discriminant analysis (``DiscriminantAnalysis``)
-* Gaussian naive Bayes (``GaussianNBClassifier``)
-* AdaBoost (``AdaBoostClassifier``)
+* AdaBoost (:class:`rithml.classification.AdaBoostClassifer`)
+* Decision tree (:class:`rithml.classification.DecisionTreeClassifer`)
+* Linear/quadratic discriminant analysis (:class:`rithml.classification.DiscriminantAnalysis`)
+* Gaussian naive Bayes (:class:`rithml.classification.GaussianNBClassifier`)
+* Gradient boosting classification trees (:class:`rithml.classification.GradientBoostingClassifier`)
+* K-nearest neighbors (:class:`rithml.classification.KNNClassifier`)
+* Logistic regression (:class:`rithml.classification.LogisticRegression`)
+* Random forest (:class:`rithml.classification.RandomForestClassifier`)
+* Support vector machine (:class:`rithml.classification.SupportVectorClassifier`)
 '''
 
 import numpy as np
@@ -30,53 +30,49 @@ class LogisticRegression(base.BaseModel):
     Class for performing logistic regression.
 
     The following variable names are used in this class's documentation:
-    `n_samples`: Number of samples in the training data.
-    `n_features`: Number of features in the training data.
-    `n_classes`: Number of classes in the training data.
-    
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        weight_ : numpy.ndarray of shape `(n_classes, n_features)` or
-        `(n_features,)`
-            Feature weights used in the decision function.
-            If the labels are not binary (i.e. `n_classes > 2`), then
-            this is a 2-D array with weights for each class. Otherwise,
-            its shape is `(n_features,)`.
-        bias_ : numpy.ndarray of `(n_classes,)` or float
-            Bias(es) used in the decision function.
-            If the labels are not binary (i.e. `n_classes > 2`), then
-            this is an array with a bias for each class. Otherwise,
-            it is a single bias (float).
 
-    Methods:
-        fit(X, y)
-            Fits a logistic regression model to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.        
+    `n_samples`: Number of samples in the training data.
+
+    `n_features`: Number of features in the training data.
+
+    `n_classes`: Number of classes in the training data.
+
+    Parameters
+    ----------
+    alpha : float, default 0
+        Regularization coefficient (strength). The regularization type
+        is L2.
+    tol : float, default 0.01
+        Tolerance argument for logistic loss minimization. (A smaller
+        value will increase runtime but may improve model performance.)
+    verbose : bool, default False
+        If True, output details about progress and time elapsed during
+        fitting.
+    
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model, where `n_classes` is
+        the number of classes.
+    weight_ : numpy.ndarray of shape `(n_classes, n_features)` or `(n_features,)`
+        Feature weights used in the decision function.
+        If the labels are not binary (i.e. `n_classes > 2`), then this
+        is a 2-D array with weights for each class. Otherwise, its shape
+        is `(n_features,)`.
+    bias_ : numpy.ndarray of `(n_classes,)` or float
+        Bias(es) used in the decision function.
+        If the labels are not binary (i.e. `n_classes > 2`), then this
+        is an array with a bias for each class. Otherwise, it is a
+        single bias (float).  
     '''
     
     def __init__(self, *, alpha=0, tol=0.01, verbose=False):
         '''
-        Creates a linear regression object.
+        Creates a logistic regression object.
         
-        Parameters:
-            alpha : float, default 0
-                Regularization coefficient (strength). The
-                regularization type is L2.
-            tol : float, default 0.01
-                Tolerance argument for logistic loss minimization. (A
-                smaller value will increase runtime but may improve
-                model performance.)
-            verbose : bool, default False
-                If True, output details about progress and time elapsed
-                during fitting.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -100,17 +96,19 @@ class LogisticRegression(base.BaseModel):
         `n_samples_` and `n_features_` are the numbers of samples and
         features provided in the input data, respectively.
         
-        Parameters:
-            w0 : numpy.ndarray of shape `(n_features_,)`
-                Feature weights.
-            X : numpy.ndarray of shape `(n_samples_, n_features_,)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples_,)`
-                Training labels.
+        Parameters
+        ----------
+        w0 : numpy.ndarray of shape `(n_features_,)`
+            Feature weights.
+        X : numpy.ndarray of shape `(n_samples_, n_features_,)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples_,)`
+            Training labels.
         
-        Returns:
-            ll : float
-                Computed logistic loss.
+        Returns
+        -------
+        ll : float
+            Computed logistic loss.
         '''
         
         reg = self.alpha * np.dot(w0[:-1], w0[:-1])
@@ -124,15 +122,17 @@ class LogisticRegression(base.BaseModel):
         '''
         Fits a logistic regression model to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : LogisticRegression
-                Fitted logistic regression model.
+        Returns
+        -------
+        self : LogisticRegression
+            Fitted logistic regression model.
         '''
 
         if self.verbose:
@@ -202,13 +202,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -230,48 +232,61 @@ class _DTCNode():
     (classification).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
     `n_classes`: Number of classes in the training data (or as manually
         specified).
+
+    Parameters
+    ----------
+    depth : int
+        Depth of node in tree.
+    max_depth : int
+        Maximum depth of tree.
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    class_weight : dict, default None
+        Dictionary of certain classes (keys) and associated weights
+        (values). For each specified class, the associated weight is
+        applied to all corresponding training samples during fitting.
+    classes : numpy.ndarray of `(n_classes,)`, default
+    None
+        Array of all classes used by the tree. Only used to compute
+        probability estimates.
     
-    Attributes:
-        depth : int
-            Depth of node in tree.
-        max_depth : int
-            Maximum depth of tree.
-        impurity : {'entropy', 'gini'}, default 'entropy'
-            Impurity function for assessing split quality.
-        class_weight : dict
-            Dictionary of classes (keys) and associated weights
-            (values). For each specified class, the associated weight is
-            applied to all corresponding training samples during
-            fitting.
-        classes : numpy.ndarray of `(n_classes,)`
-            Array of all classes used by the tree. Only used to compute
-            probability estimates.
-        left : _DTCNode
-            Left child of node, or None if the node is pure.
-        right : _DTCNode
-            Right child of node, or None if the node is pure.
-        feature : int
-            Index of the feature used in making the split for the node,
-            or None if the node is pure.
-        threshold : float
-            Threshold of the split for the node, or None if the node is
-            pure.
-        label : (depends)
-            Label predicted by the node, or None if the node is not
-            pure.
-        probabilities : dict
-            Dictionary of classes and associated weighted probability
-            estimate (between 0 and 1), or None if the node is not pure.
-            
-    Methods:
-        fit(X, y[, weights])
-            Fits the node (and any child nodes, recursively) to data.
-        predict(x[, return_probabilities])
-            Predicts label given a single sample.
+    Attributes
+    ----------
+    depth : int
+        Depth of node in tree.
+    max_depth : int
+        Maximum depth of tree.
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    class_weight : dict
+        Dictionary of classes (keys) and associated weights
+        (values). For each specified class, the associated weight is
+        applied to all corresponding training samples during fitting.
+    classes : numpy.ndarray of `(n_classes,)`
+        Array of all classes used by the tree. Only used to compute
+        probability estimates.
+    left : _DTCNode
+        Left child of node, or None if the node is pure.
+    right : _DTCNode
+        Right child of node, or None if the node is pure.
+    feature : int
+        Index of the feature used in making the split for the node, or
+        None if the node is pure.
+    threshold : float
+        Threshold of the split for the node, or None if the node is
+        pure.
+    label
+        Label predicted by the node, or None if the node is not pure.
+    probabilities : dict
+        Dictionary of classes and associated weighted probability
+        estimate (between 0 and 1), or None if the node is not pure.
     '''
     
     def __init__(
@@ -280,22 +295,9 @@ class _DTCNode():
         '''
         Creates a decision tree node.
         
-        Parameters:
-            depth : int
-                Depth of node in tree.
-            max_depth : int
-                Maximum depth of tree.
-            impurity : {'entropy', 'gini'}, default 'entropy'
-                Impurity function for assessing split quality.
-            class_weight : dict, default None
-                Dictionary of certain classes (keys) and associated
-                weights (values). For each specified class, the
-                associated weight is applied to all corresponding
-                training samples during fitting.
-            classes : numpy.ndarray of `(n_classes,)`, default
-            None
-                Array of all classes used by the tree. Only used to
-                compute probability estimates.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         self.depth = depth
@@ -322,25 +324,27 @@ class _DTCNode():
 
         `n_samples_` is the number of samples whose labels and weights
         are provided.
+
         `n_classes_`  is the number of possible classes.
         
-        Parameters:
-            labels : numpy.ndarray of shape `(n_samples_,)`
-                Array of sample labels.
-            weights : numpy.ndarray of shape `(n_samples_,)`
-                Array of sample weights.
-            classes : numpy.ndarray of shape `(n_classes_,)`
-                Array of classes.
-            include_zeros : bool, default False
-                If True, include weighted frequency of a class even
-                if it was not found in the given labels.
+        Parameters
+        ----------
+        labels : numpy.ndarray of shape `(n_samples_,)`
+            Array of sample labels.
+        weights : numpy.ndarray of shape `(n_samples_,)`
+            Array of sample weights.
+        classes : numpy.ndarray of shape `(n_classes_,)`
+            Array of classes.
+        include_zeros : bool, default False
+            If True, include weighted frequency of a class even if it
+            was not found in the given labels.
         
-        Returns:
-            freqs : numpy.ndarray of shape `(n_classes_,)` or
-            `(n_classes_found,)`
-                Array of weighted class frequencies, where
-                `n_classes_found` is the number of classes found in the
-                given labels.
+        Returns
+        -------
+        freqs : numpy.ndarray of shape `(n_classes_,)` or
+        `(n_classes_found,)`
+            Array of weighted class frequencies, where `n_classes_found`
+            is the number of classes found in the given labels.
         '''
 
         freqs = np.array([weights[labels == c].sum() 
@@ -352,24 +356,25 @@ class _DTCNode():
         '''
         Fits the node (and any child nodes, recursively) to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
-            weights : numpy.ndarray of shape `(n_samples,)`, default
-            None
-                Weights for training samples. (This is different from
-                the class_weight attribute, which applies weights by
-                class instead of sample.)
-                If None, then samples are weighted uniformly.
-                These weights are combined with class weights to
-                influence calculations of node impurity and probability
-                estimates (if applicable).
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
+        weights : numpy.ndarray of shape `(n_samples,)`, default None
+            Weights for training samples. (This is different from the
+            `class_weight` attribute, which applies weights by class
+            instead of sample.)
+            If None, then samples are weighted uniformly.
+            These weights are combined with class weights to influence
+            calculations of node impurity and probability estimates (if
+            applicable).
         
-        Returns:
-            self : _DTCNode
-                Fitted decision tree node.
+        Returns
+        -------
+        self : _DTCNode
+            Fitted decision tree node.
         '''
 
         at_max = (self.max_depth != None) and (self.depth >= self.max_depth)
@@ -461,18 +466,20 @@ class _DTCNode():
         '''
         Predicts label given a single sample.
         
-        Parameters:
-            x : numpy.ndarray of shape `(n_features,)`
-                Predictors (for a single sample) to compute a label for.
-            return_probabilities : bool, default False
-                If True, also return the probability estimates for the
-                prediction.
+        Parameters
+        ----------
+        x : numpy.ndarray of shape `(n_features,)`
+            Predictors (for a single sample) to compute a label for.
+        return_probabilities : bool, default False
+            If True, also return the probability estimates for the
+            prediction.
         
-        Returns:
-            y : (depends)
-                Predicted label. If `return_probabilities` is True, then
-                an array containing the label and the probability
-                estimates for all classes (as a dictionary) is returned.
+        Returns
+        -------
+        y : 
+            Predicted label. If `return_probabilities` is True, then an
+            array containing the label and the probability estimates for
+            all classes (as a dictionary) is returned.
         '''
         
         # Check if node is pure; otherwise, recursively call `predict`
@@ -490,26 +497,29 @@ class DecisionTreeClassifier(base.BaseModel):
     Class for performing classification via decision tree.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    max_depth : int, default None
+        Maximum depth of tree.
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    class_weight : dict, default None
+        Dictionary of certain classes (keys) and associated weights
+        (values). For each specified class, the associated weight is
+        applied to all corresponding training samples during fitting.
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        root_ : _DTCNode
-            Root node of underlying decision tree.
-            
-    Methods:
-        fit(X, y[, weights])
-            Fits a decision tree classifier to data.
-        predict(X[, return_probabilities])
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model, where `n_classes` is
+        the number of classes.
+    root_ : _DTCNode
+        Root node of underlying decision tree.
     '''
     
     def __init__(
@@ -517,16 +527,9 @@ class DecisionTreeClassifier(base.BaseModel):
         '''
         Creates a decision tree classifier.
         
-        Parameters:
-            max_depth : int, default None
-                Maximum depth of tree.
-            impurity : {'entropy', 'gini'}, default 'entropy'
-                Impurity function for assessing split quality.
-            class_weight : dict, default None
-                Dictionary of certain classes (keys) and associated
-                weights (values). For each specified class, the
-                associated weight is applied to all corresponding
-                training samples during fitting.
+        Parameters
+        ----------
+        See class docstring.
         '''
 
         # Set parameters as attributes
@@ -543,24 +546,25 @@ class DecisionTreeClassifier(base.BaseModel):
         '''
         Fits a decision tree classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
-            weights : numpy.ndarray of shape `(n_samples,)`, default
-            None
-                Weights for training samples. (This is different from
-                the class_weight attribute, which applies weights by
-                class instead of sample.)
-                If None, then samples are weighted uniformly.
-                These weights are combined with class weights to
-                influence calculations of node impurity and probability
-                estimates (if applicable).
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
+        weights : numpy.ndarray of shape `(n_samples,)`, default None
+            Weights for training samples. (This is different from the
+            `class_weight` attribute, which applies weights by class
+            instead of sample.)
+            If None, then samples are weighted uniformly.
+            These weights are combined with class weights to influence
+            calculations of node impurity and probability estimates (if
+            applicable).
                     
-        Returns:
-            self : DecisionTreeClassifier
-                Fitted decision tree classifier.
+        Returns
+        -------
+        self : DecisionTreeClassifier
+            Fitted decision tree classifier.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -581,22 +585,22 @@ class DecisionTreeClassifier(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
-            return_probabilities : bool, default False
-                If True, also return the probability estimates for the
-                predictions.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
+        return_probabilities : bool, default False
+            If True, also return the probability estimates for the
+            predictions.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
-            probabilities : numpy.ndarray of shape `(n_test_samples,)`,
-            optional
-                Probability estimates for predictions. That is, an array
-                of dictionaries, where each dictionary contains classes
-                (keys) and probability estimates (values) for a
-                particular sample.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
+        probabilities : numpy.ndarray of shape `(n_test_samples,)`, optional
+            Probability estimates for predictions. That is, an array of
+            dictionaries, where each dictionary contains classes (keys)
+            and probability estimates (values) for a particular sample.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -616,36 +620,33 @@ class KNNClassifier(base.BaseModel):
     Class for performing classification via k-nearest neighbors (k-NN).
     
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    n_neighbors : int, default 5
+        Number of nearest neighbors to consider.
+    weights : {'uniform', 'distance'}, default 'uniform'
+        Weights assigned to nearest neighbors, either uniform
+        ('uniform') or based on inverse distance ('distance').
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-            
-    Methods:
-        fit(X, y)
-            Fits a k-NN classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model, where `n_classes` is
+        the number of classes.
     '''
     
     def __init__(self, n_neighbors=5, *, weights='uniform'):
         '''
         Creates a k-NN classifier.
         
-        Parameters:
-            n_neighbors : int, default 5
-                Number of nearest neighbors to consider.
-            weights : {'uniform', 'distance'}, default 'uniform'
-                Weights assigned to k nearest neighbors, either uniform
-                ('uniform') or based on inverse distance ('distance').
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -665,15 +666,17 @@ class KNNClassifier(base.BaseModel):
         '''
         Fits a k-NN classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : KNNClassifier
-                Fitted k-NN classifier.
+        Returns
+        -------
+        self : KNNClassifier
+            Fitted k-NN classifier.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -692,13 +695,15 @@ class KNNClassifier(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -731,30 +736,38 @@ class GradientBoostingClassifier(base.BaseModel):
     classification trees as estimators).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
     
     Adapted from:
     https://sefiks.com/2018/10/29/a-step-by-step-gradient-boosting-example-for-classification/
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        estimators_ : dict
-            Dictionary of all classes (keys) and estimator lists
-            (values).
-            
-    Methods:
-        fit(X, y)
-            Fits a gradient boosting classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Parameters
+    ----------
+    n_estimators : int, default 100
+        Number of estimators used by the model.
+    learning_rate : float, default 0.1
+        Rate at which each additional estimator contributes to the
+        model.
+    max_depth : int, default 3
+        Maximum depth of individual estimators.
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output when every `verbose`th
+        estimator is being fitted (for each class).
+
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model, where `n_classes` is
+        the number of classes.
+    estimators_ : dict
+        Dictionary of all classes (keys) and estimator lists (values).
     '''
     
     def __init__(
@@ -763,21 +776,9 @@ class GradientBoostingClassifier(base.BaseModel):
         '''
         Creates a gradient boosting classifier.
         
-        Parameters:
-            n_estimators : int, default 100
-                Number of estimators used by the model.
-            learning_rate : float, default 0.1
-                Rate at which each additional estimator contributes to
-                the model.
-            max_depth : int, default 3
-                Maximum depth of individual estimators.
-            impurity : {'entropy', 'gini'}, default 'entropy'
-                Impurity function for assessing split quality.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output when every `verbose`th
-                estimator is being fitted (for each class).
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -794,15 +795,17 @@ class GradientBoostingClassifier(base.BaseModel):
         '''
         Fits a gradient boosting classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : GradientBoostingClassifier
-                Fitted gradient boosting classifier.
+        Returns
+        -------
+        self : GradientBoostingClassifier
+            Fitted gradient boosting classifier.
         '''
 
         if self.verbose is not None:
@@ -859,13 +862,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -885,27 +890,80 @@ class RandomForestClassifier(base.BaseModel):
     Class for performing classification via random forest.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    n_estimators : int, default 100
+        Number of estimators used by the model.
+    max_depth : int, default None
+        Maximum depth of individual estimators.
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    bootstrap : bool, default True
+        If True, use bootstrapping, i.e. re-sample new datasets for each
+        estimator. If False, use the original dataset to fit each
+        estimator (ignoring `max_samples`).
+    random_state : int, numpy.random.RandomState, or numpy.random.Generator, default None
+        Object used for random processes during fitting, i.e.
+
+            (1) drawing samples with replacement to create
+            `n_estimators` new datasets, based on `max_samples` (when
+            `bootstrap == True`)
+
+            (2) selecting a subset of features for each such dataset,
+            based on `max_features`
+
+        If None, then a new Generator object is created (i.e. with a
+        fresh seed).
+
+        If int, then a new Generator object is created with the
+        specified int as the seed.
+
+        If RandomState or Generator, then that object is directly used.
+    max_samples : callable or int, default None
+        The number of samples to draw from the original dataset `X` to
+        create each new dataset during bootstrapping (when
+        `bootstrap == True`), one for each estimator.
+
+        If None, then `n_samples` samples are drawn.
+
+        If callable, then `max_samples(n_samples)` samples are drawn.
+        (For example, this can be used to draw a specified proportion of
+        `n_samples` samples.)
+
+        If int, then `max_samples` samples are drawn.
+    max_features : {'sqrt', 'log2'}, callable, or int, default None
+        The number of features used by each estimator.
+
+        If None, then `n_features` features are used.
+
+        If 'sqrt', then `sqrt(n_features)` features are used.
+
+        If 'log2', then `log2(n_features)` features are used.
+
+        If callable, then `max_features(n_features)` features are used.
+        (For example, this can be used to use a specified proportion of
+        `n_features` features.)
+
+        If int, then `max_features` are used.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output when every `verbose`th
+        estimator has been fitted.
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        estimators_ : dict
-            Dictionary of all DecisionTreeClassifier estimators (keys)
-            and arrays of features used (values).
-            
-    Methods:
-        fit(X, y)
-            Fits a random forest classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model, where `n_classes` is
+        the number of classes.
+    estimators_ : dict of :py:class:`rithml.classification.DecisionTreeClassifier` to numpy.ndarray
+        Dictionary of all DecisionTreeClassifier estimators (keys) and
+        arrays of features used (values).
     '''
     
     def __init__(
@@ -915,55 +973,9 @@ class RandomForestClassifier(base.BaseModel):
         '''
         Creates a random forest classifier.
         
-        Parameters:
-            n_estimators : int, default 100
-                Number of estimators used by the model.
-            max_depth : int, default None
-                Maximum depth of individual estimators.
-            impurity : {'entropy', 'gini'}, default 'entropy'
-                Impurity function for assessing split quality.
-            bootstrap : bool, default True
-                If True, use bootstrapping, i.e. re-sample new datasets
-                for each estimator. If False, use the original dataset
-                to fit each estimator (ignoring `max_samples`).
-            random_state : int, numpy.random.RandomState, or
-                numpy.random.Generator, default None
-                Object used for random processes during fitting, i.e.
-                    (1) drawing samples with replacement to create
-                    `n_estimators` new datasets, based on `max_samples`
-                    (when `bootstrap == True`)
-                    (2) selecting a subset of features for each such
-                    dataset, based on `max_features`
-                If None, then a new Generator object is created (i.e.
-                with a fresh seed).
-                If int, then a new Generator object is created with the
-                specified int as the seed.
-                If RandomState or Generator, then that object is
-                directly used.
-            max_samples : callable or int, default None
-                The number of samples to draw from the original dataset
-                `X` to create each new dataset during bootstrapping
-                (when `bootstrap == True`), one for each estimator.
-                If None, then `n_samples` samples are drawn.
-                If callable, then `max_samples(n_samples)` samples are
-                drawn. (For example, this can be used to draw a
-                specified proportion of `n_samples` samples.)
-                If int, then `max_samples` samples are drawn.
-            max_features : {
-                'sqrt', 'log2'}, callable, or int, default None
-                The number of features used by each estimator.
-                If None, then `n_features` features are used.
-                If 'sqrt', then `sqrt(n_features)` features are used.
-                If 'log2', then `log2(n_features)` features are used.
-                If callable, then `max_features(n_features)` features
-                are used. (For example, this can be used to use a
-                specified proportion of `n_features` features.)
-                If int, then `max_features` are used.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output when every `verbose`th
-                estimator has been fitted.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -985,15 +997,17 @@ class RandomForestClassifier(base.BaseModel):
         '''
         Fits a random forest classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : RandomForestClassifier
-                Fitted random forest classifier.
+        Returns
+        -------
+        self : RandomForestClassifier
+            Fitted random forest classifier.
         '''
         
         # Handle various cases for `self.random_state`
@@ -1076,13 +1090,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1101,70 +1117,67 @@ class _SVCBinary():
     vector machine (SVM).
 
     The following variable names are used in this class's documentation:
-    `n_samples`: Number of samples in the training data.
-    `n_features`: Number of features in the training data.
-    `n_sv`: Number of support vectors used by the model.
-    
-    Attributes:
-        classes : list
-            List containing the two classes to be fitted. All labels of
-            `classes[0]` will be replaced with +1 during fitting (and
-            all other labels with -1).
-            If None, then the two classes are taken to be the two most
-            common labels in the input data (in decreasing order of
-            label frequency).
-        C : float
-            Regularization constant. Must be positive; lower value means
-            more regularization.
-        kernel : callable
-            Kernel function used by the model. Takes in two arrays of
-            feature vectors and computes an array of floats.
-        sv_indices : numpy.ndarray of shape `(n_sv,)`
-            Indices of support vectors (in the training data).
-        support_vectors : numpy.ndarray of shape `(n_sv, n_features)`
-            Support vectors used by the model.
-        weight : callable
-            Function for computing the weight terms of predictions (via
-            the kernel trick). Takes in an array of feature vectors and
-            outputs an array of floats.
-        bias : float
-            Bias term associated with the model.
 
-    Methods:
-        fit(X, y)
-            Fits a support vector binary classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    `n_samples`: Number of samples in the training data.
+
+    `n_features`: Number of features in the training data.
+
+    `n_sv`: Number of support vectors used by the model.
+
+    Parameters
+    ----------
+    classes : list, default None
+        List containing the two classes to be fitted. All labels of
+        `classes[0]` will be replaced with +1 during fitting (and all
+        other labels with -1).
+        If None, then the two classes are taken to be the two most
+        common labels in the input data (in decreasing order of label
+        frequency).
+    C : float
+        Regularization constant. Must be positive; lower value means
+        more regularization.
+    kernel : callable
+        Kernel function used by the model. Takes in two feature vectors
+        and computes a float.
+    error_coef : float
+        Coefficient for margin for error (`C * error_coef`) in
+        determining support vectors when assessing coefficient values. A
+        smaller value represents a stricter threshold and may result in
+        less support vectors.
+    
+    Attributes
+    ----------
+    classes : list
+        List containing the two classes to be fitted. All labels of
+        `classes[0]` will be replaced with +1 during fitting (and all
+        other labels with -1).
+        If None, then the two classes are taken to be the first two
+        labels in the input data after alphabetization.
+    C : float
+        Regularization constant. Must be positive; lower value means
+        more regularization.
+    kernel : callable
+        Kernel function used by the model. Takes in two arrays of
+        feature vectors and computes an array of floats.
+    sv_indices : numpy.ndarray of shape `(n_sv,)`
+        Indices of support vectors (in the training data).
+    support_vectors : numpy.ndarray of shape `(n_sv, n_features)`
+        Support vectors used by the model.
+    weight : callable
+        Function for computing the weight terms of predictions (via the
+        kernel trick). Takes in an array of feature vectors and outputs
+        an array of floats.
+    bias : float
+        Bias term associated with the model.
     '''
 
     def __init__(self, classes=None, *, C, kernel, error_coef):
         '''
         Creates a support vector binary classifier.
         
-        Parameters:
-            classes : list, default None
-                List containing the two classes to be fitted. All labels
-                of `classes[0]` will be replaced with +1 during fitting
-                (and all other labels with -1).
-                If None, then the two classes are taken to be the two
-                most common labels in the input data (in decreasing
-                order of label frequency).
-            C : float
-                Regularization constant. Must be positive; lower value
-                means more regularization.
-            kernel : callable
-                Kernel function used by the model. Takes in two feature
-                vectors and computes a float.
-            error_coef : float
-                Coefficient for margin for error (`C * error_coef`) in
-                determining support vectors when assessing coefficient
-                values. A smaller value represents a stricter threshold
-                and may result in less support vectors.
+        Parameters
+        ----------
+        See class docstring.
         '''
 
         self.classes = classes
@@ -1182,15 +1195,17 @@ class _SVCBinary():
         '''
         Fits a support vector binary classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : _SVCBinary
-                Fitted support vector binary classifier.
+        Returns
+        -------
+        self : _SVCBinary
+            Fitted support vector binary classifier.
         '''
                 
         # Ensure input array is a 2-D array of floats
@@ -1199,7 +1214,7 @@ class _SVCBinary():
         m = len(X)
         
         # Transform labels into {+1, -1} according to `self.classes`
-        classes = np.unique(y) if self.classes is None else self.classes
+        classes = np.unique(y)[:2] if self.classes is None else self.classes
         y2 = np.array([1. if i == classes[0] else -1. for i in y])
         
         self._dict = {True: classes[0], False: classes[1]}
@@ -1244,13 +1259,15 @@ class _SVCBinary():
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1266,29 +1283,71 @@ class SupportVectorClassifier(base.BaseModel):
     '''
     Class for performing classification via support vector machine
     (SVM).
+
     Note: The default parameter values may result in a poor model. If
     so, it is advised to change these values from their defaults,
     especially `C` or `gamma`.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
     `n_classes`: Number of classes in the training data.
+
+    Parameters
+    ----------
+    kind : {'ovr', 'ovo'}, default 'ovr'
+        Specifies how to create the model's underlying binary
+        classifier(s).
+
+        If 'ovr', then the model uses one-vs-rest classification. That
+        is, for each class, the model transforms the labels to binary
+        data based on that class and fits a binary classifier to the new
+        data, resulting in a total of `n_classes` underlying binary
+        classifiers.
+        
+        If 'ovo', then the model uses one-vs-one classification. That
+        is, for each pair of classes, the model fits a binary classifier
+        to the subset of input data corresponding to those two classes,
+        resulting in a total of `n_classes * (n_classes - 1) / 2`
+        underlying binary classifiers. Note that this may still be
+        faster than 'ovr' due to smaller training sets.
+
+        If the labels are binary (i.e. `n_classes == 2`), then this
+        parameter is ignored, and the model fits a single binary
+        classifier.
+    C : float
+        Regularization constant. Must be positive; lower value means
+        more regularization. Used by all underlying binary classifiers.
+    kernel : {'rbf', 'linear', 'poly'} or callable, default 'rbf'
+        Determines kernel function used by all underlying binary
+        classifiers. If a function is provided, then it must take in two
+        arrays of feature vectors and compute an array of floats.
+    degree : int, default 3
+        Degree of polynomial kernel. If `kernel` is not 'poly', then
+        this parameter is ignored.
+    gamma : float, default 1.0
+        Gamma parameter for polynomial and radial basis function (RBF)
+        kernels. If `kernel` is not 'poly' or 'rbf', then this parameter
+        is ignored.
+    coef0 : float, default 1.0
+        Constant term used in polynomial kernel. If `kernel` is not
+        'poly', then this parameter is ignored.
+    error_coef : float, default 1e-6
+        Coefficient for margin for error (`C * error_coef`) in
+        determining support vectors when assessing coefficient values. A
+        smaller value represents a stricter threshold and may result in
+        less support vectors.
+    verbose : bool, default False
+        If True, output details about progress and time elapsed during
+        fitting.
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model.
-            
-    Methods:
-        fit(X, y)
-            Fits a support vector classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model.
     '''
 
     def __init__(
@@ -1297,53 +1356,9 @@ class SupportVectorClassifier(base.BaseModel):
         '''
         Creates a support vector classifier.
         
-        Parameters:
-            kind : {'ovr', 'ovo'}, default 'ovr'
-                Specifies how to create the model's underlying binary
-                classifier(s).
-                If 'ovr', then the model uses one-vs-rest
-                classification. That is, for each class, the model
-                transforms the labels to binary data based on that class
-                and fits a binary classifier to the new data, resulting
-                in a total of `n_classes` underlying binary classifiers.
-                If 'ovo', then the model uses one-vs-one classification.
-                That is, for each pair of classes, the model fits a
-                binary classifier to the subset of input data
-                corresponding to those two classes, resulting in a total
-                of `n_classes * (n_classes - 1) / 2` underlying binary
-                classifiers. Note that this may still be faster than
-                'ovr' due to smaller training sets.
-                If the labels are binary (i.e. `n_classes == 2`), then 
-                this parameter is ignored, and the model fits a single
-                binary classifier.
-            C : float
-                Regularization constant. Must be positive; lower value
-                means more regularization. Used by all underlying binary
-                classifiers.
-            kernel : {
-                'rbf', 'linear', 'poly'} or callable, default 'rbf'
-                Determines kernel function used by all underlying binary
-                classifiers. If a function is provided, then it must
-                take in two arrays of feature vectors and compute an
-                array of floats.
-            degree : int, default 3
-                Degree of polynomial kernel. If `kernel` is not 'poly',
-                then this parameter is ignored.
-            gamma : float, default 1.0
-                Gamma parameter for polynomial and radial basis function
-                (RBF) kernels. If `kernel` is not 'poly' or 'rbf', then
-                this parameter is ignored.
-            coef0 : float, default 1.0
-                Constant term used in polynomial kernel. If
-                `kernel` is not 'poly', then this parameter is ignored.
-            error_coef : float, default 1e-6
-                Coefficient for margin for error (`C * error_coef`) in
-                determining support vectors when assessing coefficient
-                values. A smaller value represents a stricter threshold
-                and may result in less support vectors.
-            verbose : bool, default False
-                If True, output details about progress and time elapsed
-                during fitting.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -1363,15 +1378,17 @@ class SupportVectorClassifier(base.BaseModel):
         '''
         Fits a support vector classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : SupportVectorClassifier
-                Fitted support vector classifier.
+        Returns
+        -------
+        self : SupportVectorClassifier
+            Fitted support vector classifier.
         '''
 
         # Set kernel function
@@ -1455,13 +1472,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1491,47 +1510,43 @@ class DiscriminantAnalysis(base.BaseModel):
     discriminant analysis.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    `n_classes`: Number of classes in the training data.
     
-    Attributes:
-        classes_ : numpy.ndarray of shape `(n_classes,)`
-            Array of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        probabilities_ : numpy.ndarray of shape `(n_classes,)`
-            Array of probabilities (priors) of each class.
-        means_ : numpy.ndarray of shape `(n_classes, n_features)`
-            Array of means of each class.
-        covariances_ : numpy.ndarray of shape `(n_classes, n_features,
-        n_features)`
-            Covariance matrices used by the model, depending on the
-            `kind` parameter (specified in the constructor).
-            If `kind == 'linear'`, then all covariance matrices are the
-            same (by assumption).
-            
-    Methods:
-        fit(X, y)
-            Fits a discriminant analysis model to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Parameters
+    ----------
+    kind : {'linear', 'quadratic'}, default 'linear'
+        Type of discriminant analysis performed by the model.
+        If 'linear', the model assumes equal covariance matrices for
+        each class.
+        If 'quadratic', the model assumes distinct covariance matrices
+        for each class.
+
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of shape `(n_classes,)`
+        Array of all classes assumed by the model.
+    probabilities_ : numpy.ndarray of shape `(n_classes,)`
+        Array of probabilities (priors) of each class.
+    means_ : numpy.ndarray of shape `(n_classes, n_features)`
+        Array of means of each class.
+    covariances_ : numpy.ndarray of shape `(n_classes, n_features, n_features)`
+        Covariance matrices used by the model, depending on `kind`.
+        If `kind == 'linear'`, then all covariance matrices are the same
+        (by assumption).
     '''
 
     def __init__(self, kind='linear'):
         '''
         Creates a discriminant analysis model.
         
-        Parameters:
-            kind : {'linear', 'quadratic'}, default 'linear'
-                Type of discriminant analysis performed by the model.
-                If 'linear', the model assumes equal covariance matrices 
-                for each class.
-                If 'quadratic', the model assumes distinct covariance
-                matrices for each class.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -1553,15 +1568,17 @@ class DiscriminantAnalysis(base.BaseModel):
         '''
         Fits a discriminant analysis model to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : DiscriminantAnalysis
-                Fitted discriminant analysis model.
+        Returns
+        -------
+        self : DiscriminantAnalysis
+            Fitted discriminant analysis model.
         '''
                 
         # Ensure input array is a 2-D array of floats
@@ -1639,13 +1656,15 @@ class DiscriminantAnalysis(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1673,43 +1692,41 @@ class GaussianNBClassifier(base.BaseModel):
     Class for performing classification via Gaussian naive Bayes.
     
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    `n_classes`: Number of classes in the training data.
+
+    Parameters
+    ----------
+    equal_variances : bool, default False
+        If True, assume that each feature has the same variance for all
+        classes.
     
-    Attributes:
-        classes_ : numpy.ndarray of `(n_classes,)`
-            List of all classes assumed by the model, where `n_classes`
-            is the number of classes.
-        probabilities_ : numpy.ndarray of `(n_classes,)`
-            Array of probabilities (priors) of each class.
-        means_ : numpy.ndarray of shape `(n_classes, n_features)`
-            Array of means of each class.
-        variances_ : numpy.ndarray of shape `(n_classes, n_features)`
-            Array of feature variances of each class, depending on the
-            `equal_variances` parameter (specified in the constructor).
-            If `equal_variances` is True, then feature variances are the
-            same across all classes (by assumption).
-            
-    Methods:
-        fit(X, y)
-            Fits a Gaussian naive Bayes classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    classes_ : numpy.ndarray of `(n_classes,)`
+        Array of all classes assumed by the model.
+    probabilities_ : numpy.ndarray of `(n_classes,)`
+        Array of probabilities (priors) of each class.
+    means_ : numpy.ndarray of shape `(n_classes, n_features)`
+        Array of means of each class.
+    variances_ : numpy.ndarray of shape `(n_classes, n_features)`
+        Array of feature variances of each class, depending on
+        `equal_variances`.
+        If `equal_variances` is True, then feature variances are the
+        same across all classes (by assumption).
     '''
 
     def __init__(self, *, equal_variances=False):
         '''
         Creates a Gaussian naive Bayes classifier.
 
-        Parameters:
-            equal_variances : bool, default False
-                If True, assume that each feature has the same variance
-                for all classes.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -1731,15 +1748,17 @@ class GaussianNBClassifier(base.BaseModel):
         '''
         Fits a Gaussian naive Bayes classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : GaussianNBClassifier
-                Fitted Gaussian naive Bayes classifier.
+        Returns
+        -------
+        self : GaussianNBClassifier
+            Fitted Gaussian naive Bayes classifier.
         '''
                 
         # Ensure input array is a 2-D array of floats
@@ -1816,13 +1835,15 @@ class GaussianNBClassifier(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1847,32 +1868,42 @@ class AdaBoostClassifier(base.BaseModel):
     classification trees as estimators).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
     `n_classes`: Number of classes in the training data.
 
     Source: https://hastie.su.domains/Papers/samme.pdf
     
-    Attributes:
-        classes_ :  numpy.ndarray of `(n_classes,)`
-            Array of classes used by the model.
-        estimators_ : list
-            List of all estimators used by the model.
-        estimator_weights_ : numpy.ndarray of shape `(n_estimators,)`
-            Array of weights of estimators used by the model, where
-            `n_estimators` is the number of estimators used by the
-            model (specified in the constructor).
-            
-    Methods:
-        fit(X, y)
-            Fits an AdaBoost classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Parameters
+    ----------
+    n_estimators : int, default 20
+        Number of estimators used by the model.
+    max_depth : int, default 1
+        Maximum depth of individual estimators (classification trees).
+    impurity : {'entropy', 'gini'}, default 'entropy'
+        Impurity function for assessing split quality.
+    algorithm : {'SAMME.R', 'SAMME'}, default 'SAMME.R'
+        Algorithm used by the model during fitting. The SAMME algorithm
+        uses classifications to fit the model, whereas the SAMME.R
+        algorithm uses weighted class probability estimates. The latter
+        typically converges more quickly.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output when every `verbose`th
+        estimator has been fitted.
+
+    Attributes
+    ----------
+    classes_ :  numpy.ndarray of `(n_classes,)`
+        Array of classes used by the model.
+    estimators_ : list of :py:class:`rithml.classification.DecisionTreeClassifier`
+        List of all estimators used by the model.
+    estimator_weights_ : numpy.ndarray of shape `(n_estimators,)`
+        Array of weights of estimators used by the model.
     '''
     
     def __init__(
@@ -1881,25 +1912,9 @@ class AdaBoostClassifier(base.BaseModel):
         '''
         Creates an AdaBoost classifier.
         
-        Parameters:
-            n_estimators : int, default 20
-                Number of estimators used by the model.
-            max_depth : int, default 1
-                Maximum depth of individual estimators (classification
-                trees).
-            impurity : {'entropy', 'gini'}, default 'entropy'
-                Impurity function for assessing split quality.
-            algorithm : {'SAMME.R', 'SAMME'}, default 'SAMME.R'
-                Algorithm used by the model during fitting. The SAMME
-                algorithm uses classifications to fit the model,
-                whereas the SAMME.R algorithm uses weighted class
-                probability estimates. The latter typically converges
-                more quickly.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output when every `verbose`th
-                estimator has been fitted.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -1915,20 +1930,23 @@ class AdaBoostClassifier(base.BaseModel):
     
     def _class_scores(self, wcpe):
         '''
-        Computes class scores for an estimator's predictions.
+        Computes class scores for an estimator's predictions. Used in
+        the SAMME.R algorithm.
 
         `n_samples_` is the number of samples in the input data.
         
-        Parameters:
-            wcpe : numpy.ndarray of shape `(n_samples_,)`
-                Array of dictionaries, where each dictionary contains
-                weighted class probability estimates for a sample.
+        Parameters
+        ----------
+        wcpe : numpy.ndarray of shape `(n_samples_,)`
+            Array of dictionaries, where each dictionary contains
+            weighted class probability estimates for a sample.
                     
-        Returns:
-            scores : dict
-                Dictionary of classes (keys) and arrays of shape
-                `(n_samples_,)` (values), where each array contains the
-                samples' scores for the corresponding class.
+        Returns
+        -------
+        scores : dict
+            Dictionary of classes (keys) and arrays of shape
+            `(n_samples_,)` (values), where each array contains the
+            samples' scores for the corresponding class.
         '''
         
         classes = list(wcpe[0].keys())
@@ -1950,15 +1968,17 @@ class AdaBoostClassifier(base.BaseModel):
         '''
         Fits an AdaBoost classifier to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : AdaBoostClassifier
-                Fitted AdaBoost classifier.
+        Returns
+        -------
+        self : AdaBoostClassifier
+            Fitted AdaBoost classifier.
         '''
         
         if self.verbose is not None:
@@ -2035,13 +2055,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats

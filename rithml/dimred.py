@@ -1,9 +1,8 @@
 '''
-This module implements various machine learning models for
-dimensionality reduction, listed below (alongside their class name).
+The :py:mod:`rithml.dimred` module implements various machine learning
+algorithms for dimensionality reduction:
 
-* Kernel principal components analysis 
-(:class"`rithml.dimred.KernelPCA`)
+* Kernel principal components analysis (:class:`rithml.dimred.KernelPCA`)
 * Principal components analysis (:class:`rithml.dimred.PCA`)
 '''
 
@@ -39,6 +38,10 @@ class PCA(base.BaseModel):
     def __init__(self, n_components=None):
         '''
         Creates a PCA model.
+
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -186,7 +189,7 @@ class KernelPCA(base.BaseModel):
     components_ : numpy.ndarray of shape `(n_components, n_samples)`
         Array of components used by the model, where `n_components` is
         the number of components (specified in the constructor).
-    regressors_ : list
+    regressors_ : list of :class:`rithml.regression.KernelRegression`
         List of regressors (see
         :class:`rithml.regression.KernelRegression`) used for inverse
         transformation. Only created if `fit_inverse_transform == True`.
@@ -197,6 +200,10 @@ class KernelPCA(base.BaseModel):
         coef0=1.0, fit_inverse_transform=False, alpha=1.0):
         '''
         Creates a kernel PCA model.
+
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -328,8 +335,8 @@ class KernelPCA(base.BaseModel):
 
     def inverse_transform(self, Z):
         '''
-        If applicable, reconstructs transformed data into their
-        original dimension.
+        Reconstructs transformed data into their original dimension, if
+        supported (i.e. if `fit_inverse_transform` is set to True).
         
         This is performed via kernel regression (see
         :class:`rithml.regression.KernelRegression`), where the
@@ -348,6 +355,11 @@ class KernelPCA(base.BaseModel):
         -------
         X : numpy.ndarray of shape `(n_test_samples, n_features)`
             Reconstructed data.
+
+        Raises
+        ------
+        RuntimeError
+            If `fit_inverse_transform` is not set to True.
         '''
         
         # Raise error if inverse transformation is not supported

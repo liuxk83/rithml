@@ -1,5 +1,7 @@
 '''
-Contains base model class from which all other model classes inherit.
+The :py:mod:`rithml.base` module contains the base model class
+(:py:class:`rithml.base.BaseModel`) from which all other model classes
+inherit.
 '''
 
 from copy import deepcopy
@@ -7,22 +9,20 @@ from copy import deepcopy
 class BaseModel():
     '''
     Class for the base model from which all other model classes inherit.
-            
-    Methods:
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+
+    Parameters
+    ----------
+    **params : dict
+        Model parameters.
     '''
 
     def __init__(self, **params):
         '''
         Creates a base model object.
         
-        Parameters:
-            **params : dict
-                Model parameters.
+        Parameters
+        ----------
+        See class docstring.
         '''
 
         self._init_params = params
@@ -35,15 +35,17 @@ class BaseModel():
         '''
         Gets `__init__` parameter names and corresponding arguments.
 
-        Parameters:
-            deep : bool, default True
-                If True, return parameter dictionary as a deep copy.
-                Otherwise, return a shallow copy.
+        Parameters
+        ----------
+        deep : bool, default True
+            If True, return parameter dictionary as a deep copy.
+            Otherwise, return a shallow copy.
         
-        Returns:
-            params : dict
-                Dictionary of `__init__` parameter names (keys) and
-                corresponding arguments (values).
+        Returns
+        -------
+        params : dict
+            Dictionary of `__init__` parameter names (keys) and
+            corresponding arguments (values).
         '''
 
         # Obtain copy of `__init__` parameters (deep or shallow)
@@ -57,15 +59,21 @@ class BaseModel():
         Sets the specified `__init__` parameters to the specified
         values.
 
-        Parameters:
-            params : dict
-                Model parameters, i.e. dictionary of `__init__`
-                parameter names (keys) and corresponding arguments
-                (values).
+        Parameters
+        ----------
+        params : dict
+            Model parameters, i.e. dictionary of `__init__` parameter
+            names (keys) and corresponding arguments (values).
         
-        Returns:
-            self : (depends)
-                Model object.
+        Returns
+        -------
+        self : 
+            Model object.
+
+        Raises
+        ------
+        ValueError
+            If an invalid parameter name is provided.
         '''
 
         # Obtain valid parameter names

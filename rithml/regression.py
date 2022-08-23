@@ -1,14 +1,14 @@
 '''
-This module implements various machine learning models for regression,
-listed below (alongside their class name).
+The :py:mod:`rithml.regression` module implements various machine
+learning algorithms for regression:
 
-Linear regression (`LinearRegression`)
-Decision tree (`DecisionTreeRegressor`)
-K-nearest neighbors (`KNNRegressor`)
-Gradient boosting regression trees (`GradientBoostingRegressor`)
-Random forest (`RandomForestRegressor`)
-Support vector machine (`SupportVectorRegressor`)
-Kernel regression (`KernelRegression`)
+* Decision tree (:class:`rithml.regression.DecisionTreeRegressor`)
+* Gradient boosting regression trees (:class:`rithml.regression.GradientBoostingRegressor`)
+* Kernel (ridge) regression (:class:`rithml.regression.KernelRegression`)
+* K-nearest neighbors (:class:`rithml.regression.KNNRegressor`)
+* Linear (ridge) regression (:class:`rithml.regression.LinearRegression`)
+* Random forest (:class:`rithml.regression.RandomForestRegressor`)
+* Support vector machine (:class:`rithml.regression.SupportVectorRegressor`)
 '''
 
 import numpy as np
@@ -24,39 +24,37 @@ from rithml.formatting import reformat
 class LinearRegression(base.BaseModel):
     '''
     Class for performing linear (least squares) regression.
+
     This class supports both ordinary regression (no regularization)
     and ridge regression (L2 regularization).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
-    `n_features`: Number of features in the training data.
     
-    Attributes:
-        weight_ : numpy.ndarray of shape `(n_features,)`
-            Weight term associated with model.
-        bias_ : float
-            Bias term associated with model.
-            
-    Methods:
-        fit(X, y)
-            Fits a linear regression model to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    alpha : float, default 0
+        Regularization coefficient (strength). The regularization type
+        is L2 (ridge regression).
+    
+    Attributes
+    ----------
+    weight_ : numpy.ndarray of shape `(n_features,)`
+        Weight term associated with model.
+    bias_ : float
+        Bias term associated with model.
     '''
     
     def __init__(self, alpha=0):
         '''
         Creates a linear regression object.
         
-        Parameters:
-            alpha : float, default 0
-                Regularization coefficient (strength). The
-                regularization type is L2 (ridge regression).
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -73,15 +71,17 @@ class LinearRegression(base.BaseModel):
         '''
         Fits a linear regression model to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                 
-        Returns:
-            self : LinearRegression
-                Fitted linear regression model.
+        Returns
+        -------
+        self : LinearRegression
+            Fitted linear regression model.
         '''
         
         X = reformat(X, bias=True)
@@ -102,13 +102,15 @@ class LinearRegression(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -125,48 +127,49 @@ class _DTRNode():
     (regression).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
-    `n_features`: Number of features in the training data.
     
-    Attributes:
-        depth : int
-            Depth of node in tree.
-        max_depth : int
-            Maximum depth of tree.
-        error : {'squared', 'absolute'}, default 'squared'
-            Error function for assessing split quality.
-        left : _DTRNode
-            Left child of node, or None if the node is pure.
-        right : _DTRNode
-            Right child of node, or None if the node is pure.
-        feature : int
-            Index of the feature used in making the split for the node,
-            or None if the node is pure.
-        threshold : float
-            Threshold of the split for the node, or None if the node is
-            pure.
-        label : float
-            Label predicted by the node, or None if the node is pure.
-            
-    Methods:
-        fit(X, y[, weights])
-            Fits the node (and any child nodes, recursively) to data.
-        predict(x)
-            Predicts label given a single sample.
+    `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    depth : int
+        Depth of node in tree.
+    max_depth : int
+        Maximum depth of tree.
+    error : {'squared', 'absolute'}, default 'squared'
+        Error function for assessing split quality.
+    
+    Attributes
+    ----------
+    depth : int
+        Depth of node in tree.
+    max_depth : int
+        Maximum depth of tree.
+    error : {'squared', 'absolute'}, default 'squared'
+        Error function for assessing split quality.
+    left : _DTRNode
+        Left child of node, or None if the node is pure.
+    right : _DTRNode
+        Right child of node, or None if the node is pure.
+    feature : int
+        Index of the feature used in making the split for the node, or
+        None if the node is pure.
+    threshold : float
+        Threshold of the split for the node, or None if the node is
+        pure.
+    label : float
+        Label predicted by the node, or None if the node is pure.
     '''
     
     def __init__(self, *, depth, max_depth, error='squared'):
         '''
         Creates a decision tree node.
         
-        Parameters:
-            depth : int
-                Depth of node in tree.
-            max_depth : int
-                Maximum depth of tree.
-            error : {'squared', 'absolute'}, default 'squared'
-                Error function for assessing split quality.
-            
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         self.depth = depth
@@ -185,21 +188,22 @@ class _DTRNode():
         '''
         Fits the node (and any child nodes, recursively) to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
-            weights : numpy.ndarray of shape `(n_samples,)`, default
-            None
-                Weights for training samples.
-                If None, then samples are weighted uniformly.
-                These weights are used to influence calculations of node
-                impurity.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
+        weights : numpy.ndarray of shape `(n_samples,)`, default None
+            Weights for training samples.
+            If None, then samples are weighted uniformly.
+            These weights are used to influence calculations of node
+            impurity.
         
-        Returns:
-            self : _DTRNode
-                Fitted decision tree node.
+        Returns
+        -------
+        self : _DTRNode
+            Fitted decision tree node.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -273,13 +277,15 @@ class _DTRNode():
         '''
         Predicts label given a single sample.
         
-        Parameters:
-            x : numpy.ndarray of shape `(n_features,)`
-                Predictors (for a single sample) to compute a label for.
+        Parameters
+        ----------
+        x : numpy.ndarray of shape `(n_features,)`
+            Predictors (for a single sample) to compute a label for.
         
-        Returns:
-            y : (depends)
-                Predicted label.
+        Returns
+        -------
+        y : float
+            Predicted label.
         '''
         
         # Check if node is pure; otherwise, recursively call predict on
@@ -296,34 +302,31 @@ class DecisionTreeRegressor(base.BaseModel):
     Class for performing regression via decision tree.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
-    `n_features`: Number of features in the training data.
     
-    Attributes:
-        root_ : _DTRNode
-            Root node of underlying decision tree.
-            
-    Methods:
-        fit(X, y[, weights])
-            Fits a decision tree classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    max_depth : int, default None
+        Maximum depth of tree.
+    error : {'squared', 'absolute'}, default 'squared'
+        Error function for assessing split quality.
+    
+    Attributes
+    ----------
+    root_ : _DTRNode
+        Root node of underlying decision tree.
     '''
     
     def __init__(self, max_depth=None, error='squared'):
         '''
         Creates a decision tree regressor.
         
-        Parameters:
-            max_depth : int, default None
-                Maximum depth of tree.
-            error : {'squared', 'absolute'}, default 'squared'
-                Error function for assessing split quality.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -337,21 +340,22 @@ class DecisionTreeRegressor(base.BaseModel):
     
     def fit(self, X, y, weights=None):
         '''
-        Fits a decision tree classifier to data.
+        Fits a decision tree regressor to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
-            weights : numpy.ndarray of shape `(n_samples,)`, default
-            None
-                Weights for training samples.
-                If None, then samples are weighted uniformly.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
+        weights : numpy.ndarray of shape `(n_samples,)`, default None
+            Weights for training samples.
+            If None, then samples are weighted uniformly.
                     
-        Returns:
-            self : DecisionTreeRegressor
-                Fitted decision tree regressor.
+        Returns
+        -------
+        self : DecisionTreeRegressor
+            Fitted decision tree regressor.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -370,13 +374,15 @@ class DecisionTreeRegressor(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -392,31 +398,27 @@ class KNNRegressor(base.BaseModel):
     Class for performing regression via k-nearest neighbors (k-NN).
     
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
-            
-    Methods:
-        fit(X, y)
-            Fits a k-NN classifier to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+
+    Parameters
+    ----------
+    n_neighbors : int, default 5
+        Number of nearest neighbors to consider.
+    weights : {'uniform', 'distance'}, default 'uniform'
+        Weights assigned to nearest neighbors, either uniform
+        ('uniform') or based on inverse distance ('distance').
     '''
     
     def __init__(self, n_neighbors=5, *, weights='uniform'):
         '''
         Creates a k-NN regressor.
         
-        Parameters:
-            n_neighbors : int, default 5
-                Number of nearest neighbors to consider.
-            weights : {'uniform', 'distance'}, default 'uniform'
-                Weights assigned to k nearest neighbors, either uniform
-                ('uniform') or based on inverse distance ('distance').
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -433,15 +435,17 @@ class KNNRegressor(base.BaseModel):
         '''
         Fits a k-NN regressor to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : KNNRegressor
-                Fitted k-NN regressor.
+        Returns
+        -------
+        self : KNNRegressor
+            Fitted k-NN regressor.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -459,13 +463,15 @@ class KNNRegressor(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -501,23 +507,32 @@ class GradientBoostingRegressor(base.BaseModel):
     regression trees as estimators).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    n_estimators : int, default 100
+        Number of estimators used by the model.
+    learning_rate : float, default 0.1
+        Rate at which each additional estimator contributes to the
+        model.
+    max_depth : int, default 3
+        Maximum depth of individual estimators.
+    error : {'squared', 'absolute'}, default 'squared'
+        Error function for assessing split quality.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output when every `verbose`th
+        estimator has been fitted.
     
-    Attributes:
-        estimators_ : list
-            List of estimators used by the model.
-            
-    Methods:
-        fit(X, y)
-            Fits a gradient boosting regressor to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    estimators_ : list of :py:class:`rithml.regression.DecisionTreeRegressor`
+        List of estimators used by the model.
     '''
     
     def __init__(
@@ -526,21 +541,9 @@ class GradientBoostingRegressor(base.BaseModel):
         '''
         Creates a gradient boosting regressor.
         
-        Parameters:
-            n_estimators : int, default 100
-                Number of estimators used by the model.
-            learning_rate : float, default 0.1
-                Rate at which each additional estimator contributes to
-                the model.
-            max_depth : int, default 3
-                Maximum depth of individual estimators.
-            error : {'squared', 'absolute'}, default 'squared'
-                Error function for assessing split quality.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output when every `verbose`th
-                estimator has been fitted.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -556,15 +559,17 @@ class GradientBoostingRegressor(base.BaseModel):
         '''
         Fits a gradient boosting regressor to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : GradientBoostingRegressor
-                Fitted gradient boosting regressor.
+        Returns
+        -------
+        self : GradientBoostingRegressor
+            Fitted gradient boosting regressor.
         '''
 
         if self.verbose is not None:
@@ -601,13 +606,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -624,24 +631,77 @@ class RandomForestRegressor(base.BaseModel):
     Class for performing regression via random forest.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+    
     `n_features`: Number of features in the training data.
     
-    Attributes:
-        estimators_ : dict
-            Dictionary of all DecisionTreeRegressor estimators (keys)
-            and arrays of features used (values).
-            
-    Methods:
-        fit(X, y)
-            Fits a random forest regressor to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Parameters
+    ----------
+    n_estimators : int, default 100
+        Number of estimators used by the model.
+    max_depth : int, default None
+        Maximum depth of individual estimators.
+    error : {'squared', 'absolute'}, default 'squared'
+        Error function for assessing split quality.
+    bootstrap : bool, default True
+        If True, use bootstrapping, i.e. re-sample new datasets for each
+        estimator. If False, use the original dataset to fit each
+        estimator (ignoring `max_samples`).
+    random_state : int, numpy.random.RandomState, or numpy.random.Generator, default None
+        Object used for random processes during fitting, i.e.
+
+            (1) drawing samples with replacement to create
+            `n_estimators` new datasets, based on `max_samples` (when
+            `bootstrap == True`)
+
+            (2) selecting a subset of features for each such dataset,
+            based on `max_features`
+        
+        If None, then a new Generator object is created (i.e. with a
+        fresh seed).
+
+        If int, then a new Generator object is created with the
+        specified int as the seed.
+
+        If RandomState or Generator, then that object is directly used.
+    max_samples : callable or int, default None
+        The number of samples to draw from the original dataset `X` to
+        create each new dataset during bootstrapping (when
+        `bootstrap == True`), one for each estimator.
+
+        If None, then `n_samples` samples are drawn.
+
+        If callable, then `max_samples(n_samples)` samples are drawn.
+        (For example, this can be used to draw a specified proportion of
+        `n_samples` samples.)
+
+        If int, then `max_samples` samples are drawn.
+    max_features : {'sqrt', 'log2'}, callable, or int, default None
+        The number of features used by each estimator.
+
+        If None, then `n_features` features are used.
+
+        If 'sqrt', then `sqrt(n_features)` features are used.
+
+        If 'log2', then `log2(n_features)` features are used.
+
+        If callable, then `max_features(n_features)` features are used.
+        (For example, this can be used to use a specified proportion of
+        `n_features` features.)
+
+        If int, then `max_features` are used.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output when every `verbose`th
+        estimator has been fitted.
+    
+    Attributes
+    ----------
+    estimators_ : dict of :py:class:`rithml.regression.DecisionTreeRegressor` to numpy.ndarray
+        Dictionary of all DecisionTreeRegressor estimators (keys) and
+        arrays of features used (values).
     '''
     
     def __init__(
@@ -649,57 +709,11 @@ class RandomForestRegressor(base.BaseModel):
         random_state=None, max_samples=None, max_features=None,
         bootstrap=True, verbose=None):
         '''
-        Creates a random forest classifier.
+        Creates a random forest regressor.
         
-        Parameters:
-            n_estimators : int, default 100
-                Number of estimators used by the model.
-            max_depth : int, default None
-                Maximum depth of individual estimators.
-            error : {'squared', 'absolute'}, default 'squared'
-                Error function for assessing split quality.
-            bootstrap : bool, default True
-                If True, use bootstrapping, i.e. re-sample new datasets
-                for each estimator. If False, use the original dataset
-                to fit each estimator (ignoring `max_samples`).
-            random_state : int, numpy.random.RandomState, or
-                numpy.random.Generator, default None
-                Object used for random processes during fitting, i.e.
-                    (1) drawing samples with replacement to create
-                    `n_estimators` new datasets, based on `max_samples`
-                    (when `bootstrap == True`)
-                    (2) selecting a subset of features for each such
-                    dataset, based on `max_features`
-                If None, then a new Generator object is created (i.e.
-                with a fresh seed).
-                If int, then a new Generator object is created with the
-                specified int as the seed.
-                If RandomState or Generator, then that object is
-                directly used.
-            max_samples : callable or int, default None
-                The number of samples to draw from the original dataset
-                `X` to create each new dataset during bootstrapping
-                (when `bootstrap == True`), one for each estimator.
-                If None, then `n_samples` samples are drawn.
-                If callable, then `max_samples(n_samples)` samples are
-                drawn. (For example, this can be used to draw a
-                specified proportion of `n_samples` samples.)
-                If int, then `max_samples` samples are drawn.
-            max_features : {
-                'sqrt', 'log2'}, callable, or int, default None
-                The number of features used by each estimator.
-                If None, then `n_features` features are used.
-                If 'sqrt', then `sqrt(n_features)` features are used.
-                If 'log2', then `log2(n_features)` features are used.
-                If callable, then `max_features(n_features)` features
-                are used. (For example, this can be used to use a
-                specified proportion of `n_features` features.)
-                If int, then `max_features` are used.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output when every `verbose`th
-                estimator has been fitted.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -720,13 +734,15 @@ class RandomForestRegressor(base.BaseModel):
         '''
         Fits a random forest regressor to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
+        Returns
+        -------
             self : RandomForestRegressor
                 Fitted random forest regressor.
         '''
@@ -808,13 +824,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -835,32 +853,53 @@ class SupportVectorRegressor(base.BaseModel):
     especially `C` or `gamma`.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+    
     `n_features`: Number of features in the training data.
     
     Adapted from: Smola, Alex J.; Scholkopf, Bernhard (2004). "A
     tutorial on support vector regression" (PDF). Statistics and
     Computing. 14 (3): 199-222.
+
     (https://alex.smola.org/papers/2004/SmoSch04.pdf)
     
-    Attributes:
-        weight_ : callable
-            Function for computing the weight term of a prediction (via
-            the kernel trick). Takes in a feature vector and outputs a
-            float.
-        bias_ : float
-            Bias term associated with the model.
+    Parameters
+    ----------
+    C : float
+        Regularization constant. Must be positive; lower value means
+        more regularization.
+    kernel : {'rbf', 'linear', 'poly'} or callable, default 'rbf'
+        Determines kernel function used by the model. If a function is
+        provided, then it must take in two feature vectors and compute a
+        float.
+    degree : int, default 3
+        Degree of polynomial kernel. If `kernel` is not 'poly', then
+        this parameter is ignored.
+    gamma : float, default 1.0
+        Gamma parameter for polynomial and radial basis function (RBF)
+        kernels. If `kernel` is not 'poly' or 'rbf', then this parameter
+        is ignored.
+    coef0 : float, default 1.0
+        Constant term used in polynomial kernel. If `kernel` is not
+        'poly', then this parameter is ignored.
+    epsilon : float, default 0.1
+        Size of margin used by the model. Penalties are based only on
+        the errors of predictions for training samples outside this
+        margin, i.e. the support vectors.
+    error_coef : float
+        Coefficient for margin for error (`C * error_coef`) in
+        determining support vectors when assessing coefficient values. A
+        smaller value represents a stricter threshold and may result in
+        less support vectors.
 
-    Methods:
-        fit(X, y)
-            Fits a support vector regressor to data.
-        predict(X)
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    weight_ : callable
+        Function for computing the weight term of a prediction (via the
+        kernel trick). Takes in a feature vector and outputs a float.
+    bias_ : float
+        Bias term associated with the model.
     '''
     
     def __init__(
@@ -869,34 +908,9 @@ class SupportVectorRegressor(base.BaseModel):
         '''
         Creates a support vector regressor.
         
-        Parameters:
-            C : float
-                Regularization constant. Must be positive; lower value
-                means more regularization.
-            kernel : {
-                'rbf', 'linear', 'poly'} or callable, default 'rbf'
-                Determines kernel function used by all underlying binary
-                classifiers. If a function is provided, then it must
-                take in two feature vectors and compute a float.
-            degree : int, default 3
-                Degree of polynomial kernel. If `kernel` is not 'poly',
-                then this parameter is ignored.
-            gamma : float, default 1.0
-                Gamma parameter for polynomial and radial basis function
-                (RBF) kernels. If `kernel` is not 'poly' or 'rbf', then
-                this parameter is ignored.
-            coef0 : float, default 1.0
-                Constant term used in polynomial kernel. If
-                `kernel` is not 'poly', then this parameter is ignored.
-            epsilon : float, default 0.1
-                Size of margin used by the model. Penalties are based
-                only on the errors of predictions for training samples
-                outside this margin, i.e. the support vectors.
-            error_coef : float
-                Coefficient for margin for error (`C * error_coef`) in
-                determining support vectors when assessing coefficient
-                values. A smaller value represents a stricter threshold
-                and may result in less support vectors.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -916,15 +930,17 @@ class SupportVectorRegressor(base.BaseModel):
         '''
         Fits a support vector regressor to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
                     
-        Returns:
-            self : SupportVectorRegressor
-                Fitted support vector regressor.
+        Returns
+        -------
+        self : SupportVectorRegressor
+            Fitted support vector regressor.
         '''
 
         # Set kernel function
@@ -986,13 +1002,15 @@ class SupportVectorRegressor(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -1006,6 +1024,7 @@ class SupportVectorRegressor(base.BaseModel):
 class KernelRegression(base.BaseModel):
     '''
     Class for performing kernel regression.
+
     This class supports both ordinary regression (no regularization)
     and ridge regression (L2 regularization).
 
@@ -1013,34 +1032,48 @@ class KernelRegression(base.BaseModel):
     so, it is advised to change these values from their defaults,
     especially `alpha` or `gamma`.
 
-    Note that attempting to perform ordinary regression (with alpha=0)
+    Note that attempting to perform ordinary regression (with `alpha=0`)
     may result in a singular matrix error during fitting. For this
-    reason, it may be better to use a very low alpha value instead.
+    reason, it may be better to use a very low `alpha` value instead.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+    
     `n_features`: Number of features in the training data.
 
     Adapted from: https://statinfer.wordpress.com/2013/08/05/undocumented-machine-learning-ii-kernel-regression/
     
-    Attributes:
-        weight_ : numpy.ndarray of shape `(n_samples,)`
-            Weight term associated with model.
-        bias_ : float
-            Bias term associated with model.
-        mean_ : numpy.ndarray of shape `(n_features,)`
-            Mean of the training data.
-            
-    Methods:
-        fit(X, y[, K])
-            Fits a kernel regression model to data.
-        predict(X[, K_pred])
-            Predicts labels given input data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Parameters
+    ----------
+    alpha : float, default 1.0
+        Regularization coefficient (strength). The
+        regularization type is L2 (ridge regression).
+    kernel : {'rbf', 'linear', 'poly'} or callable, default 'rbf'
+        Determines kernel function used by the model. If a function is
+        provided, then it must take in two feature vectors and compute a
+        float.
+    degree : int, default 3
+        Degree of polynomial kernel. If `kernel` is not 'poly', then
+        this parameter is ignored.
+    gamma : float, default 1.0
+        Gamma parameter for polynomial and radial basis function (RBF)
+        kernels. If `kernel` is not 'poly' or 'rbf', then this parameter
+        is ignored.
+    coef0 : float, default 1.0
+        Constant term used in polynomial kernel. If `kernel` is not
+        'poly', then this parameter is ignored.
+    nonzero_bias : bool, default True
+        If False, the model assumes a bias of 0.
+
+    Attributes
+    ----------
+    weight_ : numpy.ndarray of shape `(n_samples,)`
+        Weight term associated with model.
+    bias_ : float
+        Bias term associated with model.
+    mean_ : numpy.ndarray of shape `(n_features,)`
+        Mean of the training data.
     '''
     
     def __init__(
@@ -1049,27 +1082,9 @@ class KernelRegression(base.BaseModel):
         '''
         Creates a kernel regression object.
         
-        Parameters:
-            alpha : float, default 1.0
-                Regularization coefficient (strength). The
-                regularization type is L2 (ridge regression).
-            kernel : {
-                'rbf', 'linear', 'poly'} or callable, default 'rbf'
-                Determines kernel function used by all underlying binary
-                classifiers. If a function is provided, then it must
-                take in two feature vectors and compute a float.
-            degree : int, default 3
-                Degree of polynomial kernel. If `kernel` is not 'poly',
-                then this parameter is ignored.
-            gamma : float, default 1.0
-                Gamma parameter for polynomial and radial basis function
-                (RBF) kernels. If `kernel` is not 'poly' or 'rbf', then
-                this parameter is ignored.
-            coef0 : float, default 1.0
-                Constant term used in polynomial kernel. If
-                `kernel` is not 'poly', then this parameter is ignored.
-            nonzero_bias : bool, default True
-                If False, the model assumes a bias of 0.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -1091,23 +1106,24 @@ class KernelRegression(base.BaseModel):
         '''
         Fits a kernel regression model to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
-            y : numpy.ndarray of shape `(n_samples,)`
-                Training labels.
-            K : numpy.ndarray of shape `(n_samples, n_samples)`,
-            default None
-                Kernel matrix, i.e. kernel result for every pair of
-                training samples.
-                If `nonzero_bias` is True, then these training samples
-                should be mean-centered before applying the kernel
-                function to them.
-                If None, the model computes the kernel matrix itself.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
+        y : numpy.ndarray of shape `(n_samples,)`
+            Training labels.
+        K : numpy.ndarray of shape `(n_samples, n_samples)`, default None
+            Kernel matrix, i.e. kernel result for every pair of training
+            samples.
+            If `nonzero_bias` is True, then these training samples
+            should be mean-centered before applying the kernel function
+            to them.
+            If None, the model computes the kernel matrix itself.
                 
-        Returns:
-            self : KernelRegression
-                Fitted kernel regression model.
+        Returns
+        -------
+        self : KernelRegression
+            Fitted kernel regression model.
         '''
         
         # Set kernel function
@@ -1150,22 +1166,22 @@ class KernelRegression(base.BaseModel):
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Predictors to predict labels for.
-            K_pred : numpy.ndarray of shape `(n_test_samples,
-            n_samples)`, default None
-                Kernel matrix, i.e. kernel result for every test sample
-                with every training sample.
-                If `nonzero_bias` is True, then all samples should be
-                mean-centered (based on the training mean, i.e. the
-                `mean_` attribute) before applying the kernel function
-                to them.
-                If None, the model computes the kernel matrix itself.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Predictors to predict labels for.
+        K_pred : numpy.ndarray of shape `(n_test_samples, n_samples)`, default None
+            Kernel matrix, i.e. kernel result for every test sample with
+            every training sample.
+            If `nonzero_bias` is True, then all samples should be
+            mean-centered (based on the training mean, i.e. the `mean_`
+            attribute) before applying the kernel function to them.
+            If None, the model computes the kernel matrix itself.
         
-        Returns:
-            y_pred : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        y_pred : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats

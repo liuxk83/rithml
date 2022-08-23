@@ -1,9 +1,9 @@
 '''
-This module implements various machine learning models for clustering,
-listed below (alongside their class name).
+The :py:mod:`rithml.clustering` module implements various machine
+learning algorithms for clustering:
 
-K-means clustering (`KMeans`)
-Gaussian mixture model (`GaussianMixture`)
+* Gaussian mixture model (:class:`rithml.clustering.GaussianMixture`)
+* K-means clustering (:class:`rithml.clustering.KMeans`)
 '''
 
 import numpy as np
@@ -19,34 +19,61 @@ class KMeans(base.BaseModel):
     Class for performing k-means clustering.
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
+
+    Parameters
+    ----------
+    n_clusters : int, default 3
+        Number of clusters assumed by the model.
+    init : {'k-means++', 'random'} or numpy.ndarray of shape `(n_clusters, n_features)`, default 'k-means++'
+        Specifies how to initialize the means (cluster centers) for the
+        model.
+
+        If 'k-means++', then the k-means++ algorithm is used.
+
+        If 'random', then a random sample of size n_clusters is selected
+        without replacement from the training data.
+
+        If numpy.ndarray, then the specified array (if the shape is
+        correct) is used, i.e. assumed to be the array of means.
+    max_iter : int, default 100
+        Maximum number of iterations for the model to take before
+        stopping.
+        If None, then no maximum is used.
+    random_state : int, numpy.random.RandomState, or numpy.random.Generator, default None
+        Object used for random processes during fitting, i.e. randomly
+        drawing samples from the training data during initialization, if
+        `init` is 'k-means++' or 'random'.
+        (If `init` is an array, then `random_state` is not
+        used.)
+
+        If None, then a new Generator object is created (i.e. with a
+        fresh seed).
+
+        If int, then a new Generator object is created with the
+        specified int as the seed.
+
+        If RandomState or Generator, then that object is directly used.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output a progress message after every
+        `verbose` iterations.
     
-    Attributes:
-        centers_ : numpy.ndarray of shape `(n_clusters, n_features)`
-            Array of all cluster centers of the fitted model, where
-            `n_clusters` is the number of clusters assumed by the model
-            (specified in the constructor).
-        labels_ : numpy.ndarray of shape `(n_samples,)`
-            Labels assigned by the fitted model to the training data.
-        n_iter_ : int
-            Number of iterations taken by the model before stopping.
-        distortion_ : float
-            Distortion of the training data, i.e. sum of all squared
-            distances from corresponding cluster centers.
-            
-    Methods:
-        fit(X)
-            Fits a k-means clustering model to data.
-        predict(X)
-            Predicts labels for the input data.
-        fit_predict(X)
-            Fits the model to data and then predicts their labels.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    centers_ : numpy.ndarray of shape `(n_clusters, n_features)`
+        Array of all cluster centers of the fitted model.
+    labels_ : numpy.ndarray of shape `(n_samples,)`
+        Labels assigned by the fitted model to the training data.
+    n_iter_ : int
+        Number of iterations taken by the model before stopping.
+    distortion_ : float
+        Distortion of the training data, i.e. sum of all squared
+        distances from corresponding cluster centers.
     '''
     
     def __init__(
@@ -55,41 +82,9 @@ class KMeans(base.BaseModel):
         '''
         Creates a k-means clustering model.
         
-        Parameters:
-            n_clusters : int, default 3
-                Number of clusters assumed by the model.
-            init : {'k-means++', 'random'} or numpy.ndarray of shape
-            `(n_clusters, n_features)`, default 'k-means++'
-                Specifies how to initialize the means (cluster centers)
-                for the model.
-                If 'k-means++', then the k-means++ algorithm is used.
-                If 'random', then a random sample of size n_clusters is
-                selected without replacement from the training data.
-                If numpy.ndarray, then the specified array (if the shape
-                is correct) is used, i.e. assumed to be the array of
-                means.
-            max_iter : int, default 100
-                Maximum number of iterations for the model to take
-                before stopping.
-                If None, then no maximum is used.
-            random_state : int, numpy.random.RandomState, or
-                numpy.random.Generator, default None
-                Object used for random processes during fitting, i.e.
-                randomly drawing samples from the training data during
-                initialization, if `init` is 'k-means++' or 'random'.
-                (If `init` is an array, then `random_state` is not
-                used.)
-                If None, then a new Generator object is created (i.e.
-                with a fresh seed).
-                If int, then a new Generator object is created with the
-                specified int as the seed.
-                If RandomState or Generator, then that object is
-                directly used.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output a progress message
-                after every `verbose` iterations.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -112,13 +107,15 @@ class KMeans(base.BaseModel):
         '''
         Fits a k-means clustering model to data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
                     
-        Returns:
-            self : KMeans
-                Fitted k-means clustering model.
+        Returns
+        -------
+        self : KMeans
+            Fitted k-means clustering model.
         '''
         
         # Handle various inputs for `random_state`
@@ -210,14 +207,16 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Data to predict labels of.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Data to predict labels of.
         
-        Returns:
-            labels : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
-        '''
+        Returns
+        -------
+        labels : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
+    '''
         
         # Ensure input array is a 2-D array of floats
         X = reformat(X)
@@ -232,13 +231,15 @@ Total time (s): {(time() - start_main):.3f}')
         Fits the model to data and then predicts their labels, i.e.
         clusters the data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Data to fit to and predict labels of.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Data to fit to and predict labels of.
         
-        Returns:
-            labels : numpy.ndarray of shape `(n_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        labels : numpy.ndarray of shape `(n_samples,)`
+            Predicted labels.
         '''
         
         return self.fit(X).labels_
@@ -248,55 +249,112 @@ class GaussianMixture(base.BaseModel):
     Class for performing clustering via a Gaussian mixture model (GMM).
 
     The following variable names are used in this class's documentation:
+
     `n_samples`: Number of samples in the training data.
+
     `n_features`: Number of features in the training data.
-    `n_components`: Number of components assumed by the model (specified
-    in the constructor).
+
+    Parameters
+    ----------
+    n_components : int, default 3
+        Number of components assumed by the model.
+    covariance_type : {'full', 'tied', 'diag', 'tied_diag', 'spherical', 'tied_spherical'}, default 'full'
+        Specifies assumptions about component covariance matrices.
+
+        If 'full', each component has its own covariance matrix.
+
+        If 'tied', all components share the same covariance matrix.
+
+        If 'diag', each component has its own covariance matrix, which
+        is assumed to be diagonal.
+
+        If 'tied_diag', all components share the same covariance matrix,
+        which is assumed to be diagonal.
+
+        If 'spherical', each component has its own covariance matrix,
+        which is assumed to be a multiple of the identity matrix.
+
+        If 'tied_spherical', all components share the same covariance
+        matrix, which is assumed to be a multiple of the identity
+        matrix.
+    tol : float, default 0.1
+        Tolerance level for assessing convergence. That is, iterations
+        of the EM algorithm stop once the increase in log-likelihood is
+        no longer above this level.
+    reg : float, default 1e-6
+        Regularization constant added to the diagonal of all component
+        covariance matrices to ensure nonsingularity.
+    max_iter : int, default 100
+        Maximum number of iterations for the model to take before
+        stopping.
+        If None, then no maximum is used.
+    init : {'k-means', 'k-means++', 'random_from_data', 'random'}, default 'k-means'
+        Specifies how to initialize the means of the components.
+
+        If 'k-means', then the k-means algorithm is used to cluster
+        the data, and the resulting cluster centers are used as the
+        means.
+
+        If 'k-means++', then the k-means++ algorithm is used to
+        initialize the means.
+
+        If 'random_from_data', then a random sample of size
+        `n_components` is selected without replacement from the training
+        data.
+
+        If 'random', then a random sample of size `n_components` is
+        selected from a multivariate Gaussian distribution fitted to the
+        training data.
+    weights_init : numpy.ndarray of shape `(n_components,)`, default None
+        Array of initial component weights for the model to use.
+        If None, the weights are initialized based on `init`.
+    means_init : numpy.ndarray of shape `(n_components, n_features)`, default None
+        Array of initial component means for the model to use.
+        If None, the means are initialized based on `init`.
+    covariances_init : numpy.ndarray of shape `(n_components, n_features, n_features)`, default None
+        Array of initial component covariance matrices for the model to
+        use.
+        If None, the covariances are initialized based on `init`.
+    random_state : int, numpy.random.RandomState, or numpy.random.Generator, default None
+        Object used for random processes during fitting, i.e. randomly
+        drawing samples from the training data during initialization.
+
+        If None, then a new Generator object is created (i.e. with a
+        fresh seed).
+
+        If int, then a new Generator object is created with the
+        specified int as the seed.
+
+        If RandomState or Generator, then that object is directly used.
+    verbose : int, default None
+        If not None, output details about progress and time elapsed
+        during fitting.
+        Additionally, if >0, then output a progress message after every
+        `verbose` iterations.
     
-    Attributes:
-        weights_ : numpy.ndarray of shape `(n_components`,)
-            Array of component weights.
-        means_ : numpy.ndarray of shape `(n_components`, `n_features`)
-            Array of component means.
-        covariances_ : numpy.ndarray of shape `(n_components`,
-        `n_features`, `n_features`)
-            Array of component covariance matrices.
-        labels_ : numpy.ndarray of shape `(n_samples,)`
-            Labels assigned by the fitted model to the training data.
-        log_likelihood_ : float
-            Log-likelihood of the training data based on the fitted
-            model.
-        n_iter_ : int
-            Number of iterations taken by the model before stopping.
-        n_params_ : int
-            Number of free parameters in the model. Depends on
-            covariance_type. Used in calculation of AIC and BIC.
-        aic_fit_ : float
-            Akaike information criterion (AIC) of the model on the
-            training data.
-        bic_fit_ : float
-            Bayesian information criterion (BIC) of the model on the
-            training data.
-        
-    Methods:
-        fit(X)
-            Fits a Gaussian mixture model (GMM) to data using the
-            expectation-maximiziation (EM) algorithm.
-        predict(X)
-            Predicts labels for the input data.
-        fit_predict(X)
-            Fits the model to data and then predicts their labels.
-        aic(X)
-            Computes the Akaike information criterion (AIC) of the model
-            on the specified data.
-        bic(X)
-            Computes the Bayesian information criterion (BIC) of the
-            model on the specified data.
-        get_params([deep])
-            Gets `__init__` parameter names and corresponding arguments.
-        set_params(**params)
-            Sets the specified `__init__` parameters to the specified
-            values.
+    Attributes
+    ----------
+    weights_ : numpy.ndarray of shape `(n_components,)`
+        Array of component weights.
+    means_ : numpy.ndarray of shape `(n_components, n_features)`
+        Array of component means.
+    covariances_ : numpy.ndarray of shape `(n_component, n_features, n_features)`
+        Array of component covariance matrices.
+    labels_ : numpy.ndarray of shape `(n_samples,)`
+        Labels assigned by the fitted model to the training data.
+    log_likelihood_ : float
+        Log-likelihood of the training data based on the fitted model.
+    n_iter_ : int
+        Number of iterations taken by the model before stopping.
+    n_params_ : int
+        Number of free parameters in the model. Depends on
+        `covariance_type`. Used in calculation of AIC and BIC.
+    aic_fit_ : float
+        Akaike information criterion (AIC) of the model on the training
+        data.
+    bic_fit_ : float
+        Bayesian information criterion (BIC) of the model on the
+        training data.
     '''
     
     def __init__(
@@ -307,80 +365,9 @@ class GaussianMixture(base.BaseModel):
         '''
         Creates a Gaussian mixture model (GMM).
         
-        Parameters:
-            n_components : int, default 3
-                Number of components assumed by the model.
-            covariance_type : {
-                'full', 'tied', 'diag', 'tied_diag', 'spherical',
-                'tied_spherical'}, default 'full'
-                Specifies assumptions about component covariance
-                matrices.
-                If 'full', each component has its own covariance matrix.
-                If 'tied', all components share the same covariance
-                matrix.
-                If 'diag', each component has its own covariance matrix,
-                which is assumed to be diagonal.
-                If 'tied_diag', all components share the same covariance
-                matrix, which is assumed to be diagonal.
-                If 'spherical', each component has its own covariance
-                matrix, which is assumed to be a multiple of the
-                identity matrix.
-                If 'tied_spherical', all components share the same
-                covariance matrix, which is assumed to be a multiple of
-                the identity matrix.
-            tol : float, default 0.1
-                Tolerance level for assessing convergence. That is,
-                iterations of the EM algorithm stop once the increase in
-                log-likelihood is no longer above this level.
-            reg : float, default 1e-6
-                Regularization constant added to the diagonal of all
-                component covariance matrices to ensure nonsingularity.
-            max_iter : int, default 100
-                Maximum number of iterations for the model to take
-                before stopping.
-                If None, then no maximum is used.
-            init : {
-                'k-means', 'k-means++', 'random_from_data', 'random'},
-                default 'k-means'
-                Specifies how to initialize the means of the components.
-                If 'k-means++', then the k-means algorithm is used to
-                cluster the data, and the resulting cluster centers are
-                used as the means.
-                If 'k-means++', then the k-means++ algorithm is used to
-                initialize the means.
-                If 'random_from_data', then a random sample of size
-                `n_components` is selected without replacement from the
-                training data.
-                If 'random', then a random sample of size `n_components`
-                is selected from a multivariate Gaussian distribution
-                fitted to the training data.
-            weights_init : list, default None
-                List of initial component weights for the model to use.
-                If None, the weights are initialized based on `init`.
-            means_init : list, default None
-                List of initial component means for the model to use.
-                If None, the means are initialized based on `init`.
-            covariances_init : list, default None
-                List of initial component covariance matrices for the
-                model to use.
-                If None, the covariances are initialized based on
-                `init`.
-            random_state : int, numpy.random.RandomState, or
-                numpy.random.Generator, default None
-                Object used for random processes during fitting, i.e.
-                randomly drawing samples from the training data during
-                initialization.
-                If None, then a new Generator object is created (i.e.
-                with a fresh seed).
-                If int, then a new Generator object is created with the
-                specified int as the seed.
-                If RandomState or Generator, then that object is
-                directly used.
-            verbose : int, default None
-                If not None, output details about progress and time
-                elapsed during fitting.
-                Additionally, if >0, then output a progress message
-                after every `verbose` iterations.
+        Parameters
+        ----------
+        See class docstring.
         '''
         
         # Set parameters as attributes
@@ -409,13 +396,15 @@ class GaussianMixture(base.BaseModel):
         Fits a Gaussian mixture model (GMM) to data using the
         expectation-maximiziation (EM) algorithm.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Training predictors.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Training predictors.
                     
-        Returns:
-            self : GaussianMixture
-                Fitted GMM.
+        Returns
+        -------
+        self : GaussianMixture
+            Fitted GMM.
         '''
 
         # Handle various inputs for `random_state`
@@ -649,13 +638,15 @@ Total time (s): {(time() - start_main):.3f}')
         `n_test_samples` refers to the number of samples in the input
         data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Data to predict labels of.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Data to predict labels of.
         
-        Returns:
-            labels : numpy.ndarray of shape `(n_test_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        labels : numpy.ndarray of shape `(n_test_samples,)`
+            Predicted labels.
         '''
         
         # Ensure input array is a 2-D array of floats
@@ -674,13 +665,15 @@ Total time (s): {(time() - start_main):.3f}')
         Fits the model to data and then predicts their labels, i.e.
         clusters the data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_samples, n_features)`
-                Data to fit to and predict labels of.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_samples, n_features)`
+            Data to fit to and predict labels of.
         
-        Returns:
-            labels : numpy.ndarray of shape `(n_samples,)`
-                Predicted labels.
+        Returns
+        -------
+        labels : numpy.ndarray of shape `(n_samples,)`
+            Predicted labels.
         '''
         
         return self.fit(X).labels_
@@ -690,16 +683,17 @@ Total time (s): {(time() - start_main):.3f}')
         Computes the Akaike information criterion (AIC) of the model on
         the specified data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Data to predict labels of and compute the AIC on, where
-                `n_test_samples` is the number of samples in the input
-                data.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Data to predict labels of and compute the AIC on, where
+            `n_test_samples` is the number of samples in the input data.
         
-        Returns:
-            aic : float
-                AIC of the model on the data. A lower value suggests a
-                stronger model.
+        Returns
+        -------
+        aic : float
+            AIC of the model on the data. A lower value suggests a
+            stronger model.
         '''
 
         # Use predicted labels to compute log-likelihood
@@ -716,16 +710,17 @@ Total time (s): {(time() - start_main):.3f}')
         Computes the Bayesian information criterion (BIC) of the model
         on the specified data.
         
-        Parameters:
-            X : numpy.ndarray of shape `(n_test_samples, n_features)`
-                Data to predict labels of and compute the BIC on, where
-                `n_test_samples` is the number of samples in the input
-                data.
+        Parameters
+        ----------
+        X : numpy.ndarray of shape `(n_test_samples, n_features)`
+            Data to predict labels of and compute the BIC on, where
+            `n_test_samples` is the number of samples in the input data.
         
-        Returns:
-            bic : float
-                BIC of the model on the data. A lower value suggests a
-                stronger model.
+        Returns
+        -------
+        bic : float
+            BIC of the model on the data. A lower value suggests a
+            stronger model.
         '''
 
         # Use predicted labels to compute log-likelihood
