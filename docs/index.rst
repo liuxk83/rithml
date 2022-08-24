@@ -22,3 +22,4 @@ RithML is developed by Kevin Liu (``kevinl9@yahoo.com``). Any feedback is welcom
    install
    api
    examples
+   release
