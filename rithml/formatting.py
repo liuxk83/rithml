@@ -14,18 +14,19 @@ def reformat(X, bias=False):
 
     `(n_rows, n_columns)` refers to the shape of the input array.
     
-    Parameters:
-        X : numpy.ndarray of shape `(n_rows, n_columns)`
-            Feature weights.
-        bias : bool, default False
-            If True, appending a column of ones to support a bias term
-            (used in linear regression, logistic regression, etc.).
+    Parameters
+    ----------
+    X : numpy.ndarray of shape `(n_rows, n_columns)`
+        Feature weights.
+    bias : bool, default False
+        If True, appending a column of ones to support a bias term (used
+        in linear regression, logistic regression, etc.).
     
-    Returns:
-        X2 : numpy.ndarray of shape `(n_rows, n_columns)` or `(n_rows,
-        n_columns + 1)`
-            2-D copy of the input array with elements as floats and an
-            additional column of ones (if specified).
+    Returns
+    -------
+    X2 : numpy.ndarray of shape `(n_rows, n_columns)` or `(n_rows, n_columns + 1)`
+        2-D copy of the input array with elements as floats and an
+        additional column of ones (if specified).
     '''
 
     X2 = X.copy()
